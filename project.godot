@@ -94,11 +94,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://level_editor/LevelEditorMenu.gd"
 }, {
-"base": "Node",
-"class": "LevelInfo",
-"language": "GDScript",
-"path": "res://levels/LevelInfo.gd"
-}, {
 "base": "Node2D",
 "class": "LevelInfoEdit",
 "language": "GDScript",
@@ -158,31 +153,6 @@ _global_script_classes=[ {
 "class": "StarSprite",
 "language": "GDScript",
 "path": "res://StarSprite.gd"
-}, {
-"base": "Sprite",
-"class": "ThoughtBubble",
-"language": "GDScript",
-"path": "res://ThoughtBubble.gd"
-}, {
-"base": "Sprite",
-"class": "TimeBubble",
-"language": "GDScript",
-"path": "res://TimeBubble.gd"
-}, {
-"base": "Sprite",
-"class": "TimelineSlot",
-"language": "GDScript",
-"path": "res://timeline/TimelineSlot.gd"
-}, {
-"base": "Sprite",
-"class": "TimelineSprite",
-"language": "GDScript",
-"path": "res://timeline/TimelineSprite.gd"
-}, {
-"base": "Node2D",
-"class": "TimelineViewer",
-"language": "GDScript",
-"path": "res://timeline/TimelineViewer.gd"
 } ]
 _global_script_class_icons={
 "Actor": "",
@@ -202,7 +172,6 @@ _global_script_class_icons={
 "LevelButton": "",
 "LevelEditor": "",
 "LevelEditorMenu": "",
-"LevelInfo": "",
 "LevelInfoEdit": "",
 "LevelScene": "",
 "LevelSelect": "",
@@ -214,24 +183,18 @@ _global_script_class_icons={
 "Settings": "",
 "Shade": "",
 "SparkleSpawner": "",
-"StarSprite": "",
-"ThoughtBubble": "",
-"TimeBubble": "",
-"TimelineSlot": "",
-"TimelineSprite": "",
-"TimelineViewer": ""
+"StarSprite": ""
 }
 
 [application]
 
-config/name="Entwined Time"
-config/description="A two time manipulation puzzle game."
+config/name="Swimming in Crates"
+config/description="A one screen puzzle game for Confunding Calendar 2023."
 run/main_scene="res://LevelScene.tscn"
 boot_splash/fullsize=false
 boot_splash/use_filter=false
-boot_splash/bg_color=Color( 0.133333, 0.235294, 0.321569, 1 )
-config/icon="res://icon.png"
-config/windows_native_icon="res://icon.ico"
+boot_splash/bg_color=Color( 0.054902, 0.054902, 0.0705882, 1 )
+config/icon="res://assets/dolphin_idle.png"
 
 [display]
 
