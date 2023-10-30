@@ -157,22 +157,22 @@ func _process(delta: float) -> void:
 		var is_done = true;
 		if (current_animation[0] == 0): #move
 			animation_timer_max = 0.083;
-			position -= current_animation[1]*(animation_timer/animation_timer_max)*24;
+			position -= current_animation[1]*(animation_timer/animation_timer_max)*16;
 			animation_timer += delta;
 			if (animation_timer > animation_timer_max):
-				position += current_animation[1]*1*24;
+				position += current_animation[1]*1*16;
 				# no rounding errors here! get rounded sucker!
 				position.x = round(position.x); position.y = round(position.y);
 			else:
 				is_done = false;
-				position += current_animation[1]*(animation_timer/animation_timer_max)*24;
+				position += current_animation[1]*(animation_timer/animation_timer_max)*16;
 		elif (current_animation[0] == 1): #bump
 			animation_timer_max = 0.1;
 			var bump_amount = (animation_timer/animation_timer_max);
 			if (bump_amount > 0.5):
 				bump_amount = 1-bump_amount;
 			bump_amount *= 0.2;
-			position -= current_animation[1]*bump_amount*24;
+			position -= current_animation[1]*bump_amount*16;
 			animation_timer += delta;
 			if (animation_timer > animation_timer_max):
 				position.x = round(position.x); position.y = round(position.y);
@@ -182,7 +182,7 @@ func _process(delta: float) -> void:
 				if (bump_amount > 0.5):
 					bump_amount = 1-bump_amount;
 				bump_amount *= 0.2;
-				position += current_animation[1]*bump_amount*24;
+				position += current_animation[1]*bump_amount*16;
 		elif (current_animation[0] == 2): #set_next_texture
 			set_next_texture(current_animation[1], current_animation[3]);
 		elif (current_animation[0] == 3): #sfx

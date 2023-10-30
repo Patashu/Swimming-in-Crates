@@ -101,11 +101,15 @@ enum Animation {
 # order SEEMS to be the same as in DefaultTiles
 # keep in sync with LevelEditor
 enum Tiles {
-	Dolphin,
 	Wall,
+	Dolphin,
+	Goal,
 	WoodenCrate,
 	IronCrate,
 	SteelCrate,
+	Gem,
+	Switch,
+	Hatch,
 }
 
 # information about the level
@@ -2299,10 +2303,6 @@ func unwin() -> void:
 		save_file["levels"][level_name].clear();
 	save_game();
 	update_level_label();
-	
-func _input(event: InputEvent) -> void:
-	if (ui_stack.size() > 0):
-		return;
 	
 func serialize_current_level() -> String:
 	# keep in sync with LevelEditor.gd serialize_current_level()

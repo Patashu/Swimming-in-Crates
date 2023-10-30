@@ -3,81 +3,15 @@ class_name LevelEditor
 
 # keep in sync with GameLogic
 enum Tiles {
-#	Fire,
-#	HeavyGoal,
-#	HeavyIdle,
-#	IronCrate,
-#	Key,
-#	Ladder,
-#	LadderPlatform,
-#	LightGoal,
-#	LightIdle,
-#	Lock,
-#	LockClosed,
-#	LockOpen,
-#	Spikeball,
-#	SteelCrate,
-#	Wall,
-#	WoodenCrate,
-#	Checkpoint,
-#	CheckpointBlue,
-#	CheckpointRed,
-#	OnewayEast,
-#	OnewayNorth,
-#	OnewaySouth,
-#	OnewayWest,
-#	WoodenPlatform,
-#	Grate,
-#	OnewayEastGreen,
-#	OnewayNorthGreen,
-#	OnewaySouthGreen,
-#	OnewayWestGreen,
-#	NoHeavy,
-#	NoLight,
-#	PowerCrate,
-#	CrateGoal,
-#	NoCrate,
-#	HeavyFire,
-#	ColourRed,
-#	ColourBlue,
-#	ColourGray,
-#	ColourMagenta,
-#	ColourGreen,
-#	ColourVoid,
-#	ColourCyan,
-#	ColourOrange,
-#	ColourYellow,
-#	ColourPurple,
-#	GlassBlock, #45
-#	GreenGlassBlock, #46
-#	GreenSpikeball, #47
-#	GreenFire, #48
-#	NoRetro,
-#	NoUndo,
-#	OneUndo, #51
-#	Fuzz, #52
-#	TimeCrystalGreen, #53
-#	TimeCrystalMagenta, #54
-#	CuckooClock, #55
-#	TheNight, #56
-#	TheStars, #57
-#	VoidSpikeball, #58
-#	VoidGlassBlock, #59
-#	ChronoHelixBlue, #60
-#	ChronoHelixRed, #61
-#	HeavyGoalJoke, #62
-#	LightGoalJoke, #63
-#	LightFire, #64
-#	PowerSocket, #65
-#	GreenPowerSocket, #66
-#	VoidPowerSocket, #67
-#	ColourWhite, #68
-#	GlassBlockCracked, #69
-#	OnewayEastPurple, #70
-#	OnewayNorthPurple, #71
-#	OnewaySouthPurple, #72
-#	OnewayWestPurple, #73
-#	ColourBlurple, #74
+	Wall,
+	Dolphin,
+	Goal,
+	WoodenCrate,
+	IronCrate,
+	SteelCrate,
+	Gem,
+	Switch,
+	Hatch,
 }
 
 onready var gamelogic = get_node("/root/LevelScene").gamelogic;
@@ -122,85 +56,16 @@ func _ready() -> void:
 	
 func initialize_picker_array() -> void:		
 	picker_array.append(-1);
-#	picker_array.append(Tiles.HeavyIdle);
-#	picker_array.append(Tiles.LightIdle);
-#	picker_array.append(Tiles.HeavyGoal);
-#	picker_array.append(Tiles.LightGoal);
-#	picker_array.append(Tiles.Wall);
-#	if (puzzles >= gamelogic.chapter_standard_unlock_requirements[1]):
-#		picker_array.append(Tiles.Spikeball);
-#		picker_array.append(Tiles.Fire);
-#		picker_array.append(Tiles.HeavyFire);
-#		picker_array.append(Tiles.LightFire);
-#		picker_array.append(Tiles.NoHeavy);
-#		picker_array.append(Tiles.NoLight);
-#	if (puzzles >= gamelogic.chapter_standard_unlock_requirements[3]):
-#		picker_array.append(Tiles.OnewayEast);
-#		picker_array.append(Tiles.OnewayNorth);
-#		picker_array.append(Tiles.OnewaySouth);
-#		picker_array.append(Tiles.OnewayWest);
-#		picker_array.append(Tiles.OnewayEastGreen);
-#		picker_array.append(Tiles.OnewayNorthGreen);
-#		picker_array.append(Tiles.OnewaySouthGreen);
-#		picker_array.append(Tiles.OnewayWestGreen);
-#	if (puzzles >= gamelogic.chapter_standard_unlock_requirements[4]):
-#		picker_array.append(Tiles.Ladder);
-#		picker_array.append(Tiles.WoodenPlatform);
-#		picker_array.append(Tiles.LadderPlatform);
-#		picker_array.append(Tiles.OnewayEastPurple);
-#		picker_array.append(Tiles.OnewayNorthPurple);
-#		picker_array.append(Tiles.OnewaySouthPurple);
-#		picker_array.append(Tiles.OnewayWestPurple);
-#	if (puzzles >= gamelogic.chapter_standard_unlock_requirements[5]):
-#		picker_array.append(Tiles.IronCrate);
-#		picker_array.append(Tiles.CrateGoal);
-#		picker_array.append(Tiles.NoCrate);
-#	if (puzzles >= gamelogic.chapter_standard_unlock_requirements[6]):
-#		picker_array.append(Tiles.ColourRed);
-#		picker_array.append(Tiles.ColourBlue);
-#		picker_array.append(Tiles.ColourGray);
-#		picker_array.append(Tiles.ColourMagenta);
-#		picker_array.append(Tiles.WoodenCrate);
-#	if (puzzles >= gamelogic.chapter_standard_unlock_requirements[7]):
-#		picker_array.append(Tiles.GlassBlock);
-#	if (puzzles >= gamelogic.chapter_standard_unlock_requirements[8]):
-#		picker_array.append(Tiles.ColourGreen);
-#		picker_array.append(Tiles.GreenSpikeball);
-#		picker_array.append(Tiles.GreenFire);
-#		picker_array.append(Tiles.GreenGlassBlock);
-#	if (puzzles >= gamelogic.chapter_standard_unlock_requirements[9]):
-#		picker_array.append(Tiles.Fuzz);
-#	if (puzzles >= gamelogic.chapter_standard_unlock_requirements[10]):
-#		picker_array.append(Tiles.TimeCrystalGreen);
-#		picker_array.append(Tiles.TimeCrystalMagenta);
-#	if (puzzles >= gamelogic.chapter_standard_unlock_requirements[11]):
-#		picker_array.append(Tiles.CuckooClock);
-#		picker_array.append(Tiles.TheNight);
-#		picker_array.append(Tiles.TheStars);
-#	if (puzzles >= gamelogic.chapter_standard_unlock_requirements[12]):
-#		show_tooltips = true;
-#		picker_array.append(Tiles.SteelCrate);
-#		picker_array.append(Tiles.PowerCrate);
-#		picker_array.append(Tiles.OneUndo);
-#		picker_array.append(Tiles.NoUndo);
-#		picker_array.append(Tiles.ColourVoid);
-#		picker_array.append(Tiles.ColourCyan);
-#		picker_array.append(Tiles.ColourOrange);
-#		picker_array.append(Tiles.ColourYellow);
-#		picker_array.append(Tiles.ColourPurple);
-#		picker_array.append(Tiles.ColourBlurple);
-#		picker_array.append(Tiles.ColourWhite);
-#		picker_array.append(Tiles.VoidSpikeball);
-#		picker_array.append(Tiles.VoidGlassBlock);
-#		picker_array.append(Tiles.ChronoHelixBlue);
-#		picker_array.append(Tiles.ChronoHelixRed);
-#		picker_array.append(Tiles.HeavyGoalJoke);
-#		picker_array.append(Tiles.LightGoalJoke);
-#		picker_array.append(Tiles.PowerSocket);
-#		picker_array.append(Tiles.GreenPowerSocket);
-#		picker_array.append(Tiles.VoidPowerSocket);
-#		picker_array.append(Tiles.GlassBlockCracked);
-	
+	picker_array.append(Tiles.Wall);
+	picker_array.append(Tiles.Dolphin);
+	picker_array.append(Tiles.Goal);
+	picker_array.append(Tiles.WoodenCrate);
+	picker_array.append(Tiles.IronCrate);
+	picker_array.append(Tiles.SteelCrate);
+	picker_array.append(Tiles.Gem);
+	picker_array.append(Tiles.Switch);
+	picker_array.append(Tiles.Hatch);
+
 	for i in range(picker_array.size()):
 		var x = i % 21;
 		var y = i / 21;
