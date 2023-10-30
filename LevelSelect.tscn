@@ -1,0 +1,62 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://default_styleboxtexture.tres" type="StyleBox" id=1]
+[ext_resource path="res://DefaultTheme.tres" type="Theme" id=2]
+[ext_resource path="res://LevelSelect.gd" type="Script" id=3]
+[ext_resource path="res://GoldLabel.gd" type="Script" id=4]
+
+[node name="LevelSelect" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="Holder" type="Label" parent="."]
+margin_left = 54.0
+margin_top = 30.0
+margin_right = 463.0
+margin_bottom = 273.0
+focus_neighbour_right = NodePath("PrevButton")
+focus_neighbour_bottom = NodePath("CloseButton")
+theme = ExtResource( 2 )
+custom_styles/normal = ExtResource( 1 )
+text = "Chapter 0 - Two Time"
+align = 1
+script = ExtResource( 4 )
+
+[node name="PrevButton" type="Button" parent="Holder"]
+margin_left = 5.0
+margin_top = 223.0
+margin_right = 100.0
+margin_bottom = 238.0
+focus_neighbour_left = NodePath("../NextButton")
+focus_neighbour_right = NodePath("../LevelEditorButton")
+focus_neighbour_bottom = NodePath("../CloseButton")
+text = "Prev. Chapter (F1)"
+
+[node name="NextButton" type="Button" parent="Holder"]
+margin_left = 308.0
+margin_top = 223.0
+margin_right = 404.0
+margin_bottom = 238.0
+focus_neighbour_left = NodePath("../LevelEditorButton")
+focus_neighbour_right = NodePath("../PrevButton")
+focus_neighbour_bottom = NodePath("../CloseButton")
+text = "Next Chapter (F2)"
+
+[node name="LevelEditorButton" type="Button" parent="Holder"]
+margin_left = 172.0
+margin_top = 223.0
+margin_right = 236.0
+margin_bottom = 238.0
+focus_neighbour_left = NodePath("../PrevButton")
+focus_neighbour_right = NodePath("../NextButton")
+focus_neighbour_bottom = NodePath("../CloseButton")
+text = "Level Editor"
+
+[node name="CloseButton" type="Button" parent="Holder"]
+margin_left = 391.0
+margin_top = 5.0
+margin_right = 404.0
+margin_bottom = 20.0
+focus_neighbour_top = NodePath("../NextButton")
+text = "X"
+
+[node name="Pointer" type="Sprite" parent="Holder"]
