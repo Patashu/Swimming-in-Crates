@@ -171,22 +171,6 @@ margin_bottom = 295.0
 theme = ExtResource( 2 )
 text = "Z"
 
-[node name="SwapButton" type="Button" parent="VirtualButtons/Verbs"]
-margin_left = 35.0
-margin_top = 273.0
-margin_right = 57.0
-margin_bottom = 295.0
-theme = ExtResource( 2 )
-text = "X"
-
-[node name="MetaUndoButton" type="Button" parent="VirtualButtons/Verbs"]
-margin_left = 63.0
-margin_top = 273.0
-margin_right = 85.0
-margin_bottom = 295.0
-theme = ExtResource( 2 )
-text = "C"
-
 [node name="Dirs" type="Node2D" parent="VirtualButtons"]
 
 [node name="LeftButton" type="Button" parent="VirtualButtons/Dirs"]

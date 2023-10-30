@@ -10,8 +10,7 @@ onready var authorsreplaybutton : Button = get_node("Holder/AuthorsReplayButton"
 onready var savereplaybutton : Button = get_node("Holder/SaveReplayButton");
 onready var copyreplaybutton : Button = get_node("Holder/CopyReplayButton");
 onready var pastereplaybutton : Button = get_node("Holder/PasteReplayButton");
-onready var levelselectbutton : Button = get_node("Holder/LevelSelectButton");
-onready var insightbutton : Button = get_node("Holder/InsightButton");
+onready var leveleditorbutton : Button = get_node("Holder/LevelEditorButton");
 onready var controlsbutton : Button = get_node("Holder/ControlsButton");
 onready var settingsbutton : Button = get_node("Holder/SettingsButton");
 onready var restartbutton : Button = get_node("Holder/RestartButton");
@@ -24,23 +23,12 @@ func _ready() -> void:
 	savereplaybutton.connect("pressed", self, "_savereplaybutton_pressed");
 	copyreplaybutton.connect("pressed", self, "_copyreplaybutton_pressed");
 	pastereplaybutton.connect("pressed", self, "_pastereplaybutton_pressed");
-	levelselectbutton.connect("pressed", self, "_levelselectbutton_pressed");
-	insightbutton.connect("pressed", self, "_insightbutton_pressed");
+	leveleditorbutton.connect("pressed", self, "_leveleditorbutton_pressed");
 	controlsbutton.connect("pressed", self, "_controlsbutton_pressed");
 	settingsbutton.connect("pressed", self, "_settingsbutton_pressed");
 	restartbutton.connect("pressed", self, "_restartbutton_pressed");
 	undorestartbutton.connect("pressed", self, "_undorestartbutton_pressed");
 	#IF YOU CHANGE THE NUMBER OF BUTTONS, CHANGE FOCUS NEIGHBOURS IN EDITOR TOO!!
-	
-	if gamelogic.has_remix.has(gamelogic.level_name) or gamelogic.level_name.find("(Remix)") >= 0:
-		if gamelogic.in_insight_level:
-			insightbutton.text = "Lose Remix";
-		else:
-			insightbutton.text = "Gain Remix";
-	elif gamelogic.in_insight_level:
-		insightbutton.text = "Lose Insight";
-	elif !gamelogic.has_insight_level:
-		insightbutton.disabled = true;
 		
 	if gamelogic.user_replay_before_restarts.size() == 0:
 		undorestartbutton.disabled = true;
@@ -120,11 +108,11 @@ func _pastereplaybutton_pressed() -> void:
 	else:
 		gamelogic.replay_from_clipboard();
 	
-func _levelselectbutton_pressed() -> void:
+func _leveleditorbutton_pressed() -> void:
 	if (gamelogic.ui_stack.size() > 0 and gamelogic.ui_stack[gamelogic.ui_stack.size() - 1] != self):
 		return;
 	
-	var a = preload("res://LevelSelect.tscn").instance();
+	var a = preload("res://level_editor/LevelEditor.tscn").instance();
 	self.get_parent().add_child(a);
 	gamelogic.ui_stack.push_back(a);
 	destroy();
@@ -184,10 +172,6 @@ func _process(delta: float) -> void:
 		destroy();
 	if (Input.is_action_just_pressed("ui_cancel")):
 		destroy();
-	if (Input.is_action_just_pressed("level_select")):
-		_levelselectbutton_pressed();
-	if (Input.is_action_just_pressed("gain_insight")):
-		_insightbutton_pressed();
 		
 	var focus = holder.get_focus_owner();
 	if (focus == null):

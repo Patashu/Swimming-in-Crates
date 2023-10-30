@@ -14,7 +14,7 @@ margin_right = 340.0
 margin_bottom = 215.0
 theme = ExtResource( 2 )
 custom_styles/normal = ExtResource( 1 )
-text = "MaintBot OS 3.1 - Control Panel"
+text = "Swimming in Crates - Menu"
 align = 1
 
 [node name="OkButton" type="Button" parent="Holder"]
@@ -40,7 +40,7 @@ margin_left = 78.0
 margin_top = 35.0
 margin_right = 144.0
 margin_bottom = 50.0
-focus_neighbour_right = NodePath("../LevelSelectButton")
+focus_neighbour_right = NodePath("../LevelEditorButton")
 text = "Author's Replay"
 
 [node name="SaveReplayButton" type="Button" parent="Holder"]
@@ -48,7 +48,6 @@ margin_left = 78.0
 margin_top = 53.0
 margin_right = 160.0
 margin_bottom = 68.0
-focus_neighbour_right = NodePath("../InsightButton")
 text = "Save Replay"
 
 [node name="CopyReplayButton" type="Button" parent="Holder"]
@@ -67,21 +66,13 @@ margin_bottom = 104.0
 focus_neighbour_right = NodePath("../SettingsButton")
 text = "Paste Replay"
 
-[node name="LevelSelectButton" type="Button" parent="Holder"]
+[node name="LevelEditorButton" type="Button" parent="Holder"]
 margin_left = 9.0
 margin_top = 35.0
 margin_right = 74.0
 margin_bottom = 50.0
 focus_neighbour_left = NodePath("../AuthorsReplayButton")
-text = "Level Select"
-
-[node name="InsightButton" type="Button" parent="Holder"]
-margin_left = 9.0
-margin_top = 53.0
-margin_right = 74.0
-margin_bottom = 68.0
-focus_neighbour_left = NodePath("../SaveReplayButton")
-text = "Gain Insight"
+text = "Level Editor"
 
 [node name="ControlsButton" type="Button" parent="Holder"]
 margin_left = 9.0

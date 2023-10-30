@@ -20,28 +20,27 @@ var just_danced = false;
 
 # Must keep in sync with GameLogic serialize_bindings/deserialize_bindings
 var actions = ["ui_accept", "ui_cancel", "escape", "ui_left", "ui_right", "ui_up", "ui_down",
-"character_undo", "meta_undo", "character_switch", "restart",
-"next_level", "previous_level", "mute", "start_replay", "speedup_replay",
+"undo", "restart",
+"mute", "start_replay", "speedup_replay",
 "slowdown_replay", "start_saved_replay", 
-"replay_back1", "replay_fwd1", "replay_pause", "gain_insight", "level_select", #zero-index 21, 22 total
+"replay_back1", "replay_fwd1", "replay_pause",
 "Ctrl+C: Copy Replay", "Ctrl+V: Paste Replay", "Shift+Replay Speed+: Max Replay Speed",
 "Shift+Replay Speed-: Default Replay Speed", "Shift+Your Replay: Save Replay"
 ]
 
 var hrn_actions = ["Accept", "Cancel", "Menu", "Left", "Right", "Up", "Down",
-"Undo", "Meta-Undo", "Swap", "Restart",
-"Next Lev/Chap", "Prev Lev/Chap", "Mute", "Author's Replay", "Replay Speed+",
-"Replay Speed-", "Your Replay", "Replay Turn-", "Replay Turn+", "Replay Pause",
-"Gain Insight", "Level Select"]
+"Undo", "Restart",
+"Mute", "Author's Replay", "Replay Speed+",
+"Replay Speed-", "Your Replay", "Replay Turn-", "Replay Turn+", "Replay Pause",]
 
 var blacklist_1 = ["ui_accept", "ui_cancel", "escape", "ui_left", "ui_right", "ui_up", "ui_down"];
 var blacklist_2 = ["escape", "ui_left", "ui_right", "ui_up", "ui_down",
-"character_undo", "meta_undo", "character_switch", "restart",
-"next_level", "previous_level", "mute", "start_replay", "speedup_replay",
-"slowdown_replay", "start_saved_replay", "gain_insight", "level_select",
+"undo", "restart",
+"mute", "start_replay", "speedup_replay",
+"slowdown_replay", "start_saved_replay",
 "replay_back1", "replay_fwd1", "replay_pause"];
 var whitelist_1 = ["speedup_replay", "slowdown_replay", "replay_back1", "replay_fwd1", "replay_pause"];
-var whitelist_2 = ["previous_level", "next_level"];
+var whitelist_2 = [];
 
 var controller_images = [
 	preload("res://controller_prompts/Positional_Prompts_Down.png"),

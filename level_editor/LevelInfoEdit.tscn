@@ -25,59 +25,6 @@ margin_right = 169.0
 margin_bottom = 278.0
 text = "Ok"
 
-[node name="HeavyMoves" type="SpinBox" parent="Holder"]
-margin_left = 7.0
-margin_top = 129.0
-margin_right = 81.0
-margin_bottom = 153.0
-max_value = 999.0
-value = 6.0
-
-[node name="MusicTrack" type="SpinBox" parent="Holder"]
-margin_left = 7.0
-margin_top = 221.0
-margin_right = 81.0
-margin_bottom = 245.0
-min_value = -1.0
-max_value = 999.0
-value = 6.0
-
-[node name="LightMoves" type="SpinBox" parent="Holder"]
-margin_left = 7.0
-margin_top = 157.0
-margin_right = 81.0
-margin_bottom = 181.0
-max_value = 999.0
-value = 6.0
-
-[node name="Label" type="Label" parent="Holder"]
-margin_left = 81.0
-margin_top = 136.0
-margin_right = 146.0
-margin_bottom = 147.0
-text = "Heavy Moves"
-
-[node name="Label2" type="Label" parent="Holder"]
-margin_left = 82.0
-margin_top = 163.0
-margin_right = 147.0
-margin_bottom = 174.0
-text = "Light Moves"
-
-[node name="Label3" type="Label" parent="Holder"]
-margin_left = 81.0
-margin_top = 227.0
-margin_right = 146.0
-margin_bottom = 238.0
-text = "Music Track"
-
-[node name="ClockTurnsLabel" type="Label" parent="Holder"]
-margin_left = 149.0
-margin_top = 196.0
-margin_right = 214.0
-margin_bottom = 207.0
-text = "Clock Turns"
-
 [node name="Label4" type="Label" parent="Holder"]
 margin_left = 151.0
 margin_top = 30.0
@@ -98,12 +45,6 @@ margin_top = 102.0
 margin_right = 213.0
 margin_bottom = 113.0
 text = "Level Replay"
-
-[node name="ClockTurns" type="TextEdit" parent="Holder"]
-margin_left = 7.0
-margin_top = 184.0
-margin_right = 144.0
-margin_bottom = 218.0
 
 [node name="LevelName" type="TextEdit" parent="Holder"]
 margin_left = 8.0
