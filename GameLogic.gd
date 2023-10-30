@@ -2315,7 +2315,7 @@ func serialize_current_level() -> String:
 	# keep in sync with LevelEditor.gd serialize_current_level()
 	var result = "SwimmingInCratesPuzzleStart: " + level_name + " by " + level_author + "\n";
 	var level_metadata = {};
-	var metadatas = ["level_name", "level_author"];
+	var metadatas = ["level_name", "level_author",  "map_x_max", "map_y_max"];
 	for metadata in metadatas:
 		level_metadata[metadata] = self.get(metadata);
 	
