@@ -14,8 +14,6 @@ onready var menubutton : Button = levelscene.get_node("MenuButton");
 onready var levellabel : Label = levelscene.get_node("LevelLabel");
 onready var levelstar : Sprite = levelscene.get_node("LevelStar");
 onready var winlabel : Node2D = levelscene.get_node("WinLabel");
-onready var heavyinfolabel : Label = levelscene.get_node("HeavyInfoLabel");
-onready var lightinfolabel : Label = levelscene.get_node("LightInfoLabel");
 onready var metainfolabel : Label = levelscene.get_node("MetaInfoLabel");
 onready var tutoriallabel : RichTextLabel = levelscene.get_node("TutorialLabel");
 onready var targeter : Sprite = levelscene.get_node("Targeter")
@@ -217,7 +215,7 @@ var chapter_standard_starting_levels = [];
 var chapter_advanced_starting_levels = [];
 var chapter_standard_unlock_requirements = [];
 var chapter_advanced_unlock_requirements = [];
-var save_file_string = "user://swimmingincrates.sav";
+var save_file_string = "user://swimmingincrates0.sav";
 
 func save_game():
 	var file = File.new()
@@ -234,6 +232,12 @@ func default_save_file() -> void:
 		save_file["levels"] = {}
 	if (!save_file.has("version")):
 		save_file["version"] = 0
+	if (!save_file.has("music_volume")):
+		save_file["music_volume"] = 0.0
+	if (!save_file.has("sfx_volume")):
+		save_file["sfx_volume"] = 0.0
+	if (!save_file.has("fanfare_volume")):
+		save_file["fanfare_volume"] = 0.0
 
 func load_game():
 	var file = File.new()
@@ -478,7 +482,7 @@ func serialize_bindings() -> void:
 				save_file["controller_bindings"][action].append(event.button_index);
 	
 func setup_virtual_buttons() -> void:
-	var value = 0;
+	var value = 1;
 	if (save_file.has("virtual_buttons")):
 		value = save_file["virtual_buttons"];
 	if (value > 0):
@@ -552,11 +556,12 @@ func setup_animation_speed() -> void:
 		Engine.time_scale = value;
 		
 func initialize_shaders() -> void:
+	pass
 	#each thing that uses a shader has to compile the first time it's used, so... use it now!
-	var afterimage = preload("Afterimage.tscn").instance();
-	afterimage.initialize(targeter, arbitrary_color);
-	levelscene.call_deferred("add_child", afterimage);
-	afterimage.position = Vector2(-99, -99);
+	#var afterimage = preload("Afterimage.tscn").instance();
+	#afterimage.initialize(targeter, arbitrary_color);
+	#levelscene.call_deferred("add_child", afterimage);
+	#afterimage.position = Vector2(-99, -99);
 	# TODO: compile the Static shader by flicking it on for a single frame? same for ripple and grayscale
 	
 func tile_changes(level_editor: bool = false) -> void:
@@ -635,6 +640,7 @@ func ready_map() -> void:
 	for whatever in overactorsparticles.get_children():
 		whatever.queue_free();
 	turn = 0;
+	undo_buffer.clear();
 	user_replay = "";
 	
 	var level_info = terrainmap.get_node_or_null("LevelInfo");
@@ -976,7 +982,7 @@ pushers_list: Array = [], is_move: bool = false) -> int:
 			elif (dir == Vector2.RIGHT and actor.facing_left):
 				set_actor_var(actor, "facing_left", false, Chrono.MOVE);
 			
-		add_undo_event([Undo.move, actor, dir]);
+		add_undo_event([Undo.move, actor, dir], chrono);
 		
 		#do sound effects for special moves
 		var was_push = pushers_list.size() > 0;
@@ -1323,16 +1329,16 @@ func set_actor_var(actor: ActorBase, prop: String, value, chrono: int) -> void:
 			if (prop == "airborne"):
 				if (value == 2):
 					value = 1;
-					add_undo_event([Undo.set_actor_var, actor, prop, old_value, value]);
+					add_undo_event([Undo.set_actor_var, actor, prop, old_value, value], chrono);
 				elif (value == 1 and old_value == 2):
 					pass
 				elif (old_value == 2):
 					old_value = 1;
-					add_undo_event([Undo.set_actor_var, actor, prop, old_value, value]);
+					add_undo_event([Undo.set_actor_var, actor, prop, old_value, value], chrono);
 				else:
-					add_undo_event([Undo.set_actor_var, actor, prop, old_value, value]);
+					add_undo_event([Undo.set_actor_var, actor, prop, old_value, value], chrono);
 			else:
-				add_undo_event([Undo.set_actor_var, actor, prop, old_value, value]);
+				add_undo_event([Undo.set_actor_var, actor, prop, old_value, value], chrono);
 		
 		# sound effects for airborne changes
 		if (prop == "airborne"):
@@ -2106,7 +2112,8 @@ func update_level_label() -> void:
 		levelnumberastext = chapter_string + "-" + level_string;
 		if (level_is_extra):
 			levelnumberastext += "X";
-	levellabel.text = levelnumberastext + " - " + level_name;
+	#levellabel.text = levelnumberastext + " - " + level_name;
+	levellabel.text = level_name;
 	if (level_author != "" and level_author != "Patashu"):
 		levellabel.text += " (By " + level_author + ")"
 	if (doing_replay):
@@ -2583,17 +2590,17 @@ func _process(delta: float) -> void:
 		elif (Input.is_action_just_pressed("escape")):
 			#end_replay(); #done in escape();
 			escape();
-		elif (Input.is_action_just_pressed("previous_level")
-		and (!using_controller or ((!doing_replay or won) and (!won or won_cooldown > 0.5)))):
-			pass
+		#elif (Input.is_action_just_pressed("previous_level")
+		#and (!using_controller or ((!doing_replay or won) and (!won or won_cooldown > 0.5)))):
+		#	pass
 #			if (!using_controller or won or lost or meta_turn <= 0):
 #				end_replay();
 #				load_level(-1);
 #			else:
 #				play_sound("bump");
-		elif (Input.is_action_just_pressed("next_level")
-		and (!using_controller or ((!doing_replay or won) and (!won or won_cooldown > 0.5)))):
-			pass
+		#elif (Input.is_action_just_pressed("next_level")
+		#and (!using_controller or ((!doing_replay or won) and (!won or won_cooldown > 0.5)))):
+		#	pass
 #			if (!using_controller or won or lost or meta_turn <= 0):
 #				end_replay();
 #				load_level(1);
@@ -2672,11 +2679,11 @@ func _process(delta: float) -> void:
 			end_replay();
 			restart();
 			update_info_labels();
-		elif (Input.is_action_just_pressed("level_select")):
-			pass
+		#elif (Input.is_action_just_pressed("level_select")):
+		#	pass
 			#level_select();
-		elif (Input.is_action_just_pressed("gain_insight")):
-			pass
+		#elif (Input.is_action_just_pressed("gain_insight")):
+		#	pass
 			#end_replay();
 			#gain_insight();
 		elif (!get_debounced):

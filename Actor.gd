@@ -37,7 +37,7 @@ var action_lines_timer_max = 0.25;
 
 # faster than string comparisons
 enum Name {
-	Player,
+	Dolphin,
 	WoodenCrate,
 	IronCrate,
 	SteelCrate,
@@ -49,7 +49,7 @@ func update_graphics() -> void:
 	set_next_texture(tex, facing_left);
 
 func get_next_texture() -> Texture:
-	if actorname == Name.Player:
+	if actorname == Name.Dolphin:
 		return preload("res://assets/dolphin_idle.png");
 	elif actorname == Name.IronCrate:
 		return preload("res://assets/iron_crate.png");
@@ -184,7 +184,7 @@ func _process(delta: float) -> void:
 				bump_amount *= 0.2;
 				position += current_animation[1]*bump_amount*16;
 		elif (current_animation[0] == 2): #set_next_texture
-			set_next_texture(current_animation[1], current_animation[3]);
+			set_next_texture(current_animation[1], current_animation[2]);
 		elif (current_animation[0] == 3): #sfx
 			gamelogic.play_sound(current_animation[1]);
 		elif (current_animation[0] == 4): #fade
