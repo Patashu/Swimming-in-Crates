@@ -200,7 +200,7 @@ run/main_scene="res://LevelScene.tscn"
 boot_splash/fullsize=false
 boot_splash/use_filter=false
 boot_splash/bg_color=Color( 0.054902, 0.054902, 0.0705882, 1 )
-config/icon="res://assets/dolphin_idle.png"
+config/icon="res://icon.png"
 
 [display]
 
