@@ -103,9 +103,10 @@ func fall_speed() -> int:
 		return 99;
 	return fall_speed;
 	
-# because I want Light to float but not cuckoo clocks <w<
+# no one floats atm
 func floats() -> bool:
-	return fall_speed() == 1 and is_character;
+	return false;
+	#return fall_speed() == 1 and is_character;
 	
 func climbs() -> bool:
 	return climbs and !broken;
