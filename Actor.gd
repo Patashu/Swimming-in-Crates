@@ -18,6 +18,7 @@ var climbs = false
 var is_character = false
 var has_gem = false
 var gem = null;
+var pressing = false;
 # undo trails logic
 var color = Color(1, 1, 1, 1);
 # animation system logic
@@ -58,7 +59,7 @@ enum Name {
 
 func update_graphics() -> void:
 	var tex = get_next_texture();
-	set_next_texture(tex, facing_left);
+	set_next_texture(tex, facing_left, gem_status());
 
 func get_next_texture() -> Resource:
 	if actorname == Name.Dolphin:
@@ -69,7 +70,18 @@ func get_next_texture() -> Resource:
 		return load("res://assets/" + Name.keys()[actorname].to_lower() + ".png");
 	return null;
 
-func set_next_texture(tex: Texture, facing_left_at_the_time: bool) -> void:
+func gem_status() -> Texture:
+	if !is_instance_valid(gem):
+		return null;
+	elif pressing:
+		return preload("res://assets/gem_active.png");
+	else:
+		return preload("res://assets/gem.png");
+
+func set_next_texture(tex: Texture, facing_left_at_the_time: bool, gem_tex: Texture) -> void:
+	if is_instance_valid(gem) and gem_tex != null:
+		gem.texture = gem_tex;
+	
 	# facing updates here, even if the texture didn't change
 	if facing_left_at_the_time:
 		flip_h = true;
@@ -206,7 +218,7 @@ func _process(delta: float) -> void:
 				bump_amount *= 0.2;
 				position += current_animation[1]*bump_amount*16;
 		elif (current_animation[0] == 2): #set_next_texture
-			set_next_texture(current_animation[1], current_animation[2]);
+			set_next_texture(current_animation[1], current_animation[2], current_animation[3]);
 		elif (current_animation[0] == 3): #sfx
 			gamelogic.play_sound(current_animation[1]);
 		elif (current_animation[0] == 4): #fade

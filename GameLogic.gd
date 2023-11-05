@@ -93,6 +93,8 @@ enum Animation {
 	set_next_texture, #2
 	sfx, #3
 	fade, #4
+	press, #5
+	unpress, #6
 }
 
 # attempted performance optimization - have an enum of all tile ids and assert at startup that they're right
@@ -979,9 +981,15 @@ pushers_list: Array = [], is_move: bool = false, success: int = Success.No) -> i
 		# do facing change now before move happens
 		if (is_move and actor.is_character):
 			if (dir == Vector2.LEFT and !actor.facing_left):
-				set_actor_var(actor, "facing_left", true, Chrono.MOVE);
+				set_actor_var(actor, "facing_left", true, chrono);
 			elif (dir == Vector2.RIGHT and actor.facing_left):
-				set_actor_var(actor, "facing_left", false, Chrono.MOVE);
+				set_actor_var(actor, "facing_left", false, chrono);
+				
+		if actor.has_gem:
+			if actor.pressing:
+				set_actor_var(actor, "pressing", false, chrono);
+			if terrain_in_tile(actor.pos).has(Tiles.Switch):
+				set_actor_var(actor, "pressing", true, chrono);
 			
 		add_undo_event([Undo.move, actor, dir], chrono);
 		
@@ -1290,27 +1298,25 @@ func set_actor_var(actor: ActorBase, prop: String, value, chrono: int) -> void:
 	if (true):
 		actor.set(prop, value);
 		
-		# going to try this to fix a dinged bug - don't make undo events for dinged, since it's purely visual
-		if (prop != "dinged"):
-			# and now to fix some airborne bugs, all revolving around 2:
-			# if you go to 2, emit an event to 1 instead.
-			#If you go from 2 to 1, ignore it.
-			#If you go from 2 to anything else, pretend you came from 1.
-			
-			if (prop == "airborne"):
-				if (value == 2):
-					value = 1;
-					add_undo_event([Undo.set_actor_var, actor, prop, old_value, value], chrono);
-				elif (value == 1 and old_value == 2):
-					pass
-				elif (old_value == 2):
-					old_value = 1;
-					add_undo_event([Undo.set_actor_var, actor, prop, old_value, value], chrono);
-				else:
-					add_undo_event([Undo.set_actor_var, actor, prop, old_value, value], chrono);
+		# and now to fix some airborne bugs, all revolving around 2:
+		# if you go to 2, emit an event to 1 instead.
+		#If you go from 2 to 1, ignore it.
+		#If you go from 2 to anything else, pretend you came from 1.
+		
+		if (prop == "airborne"):
+			if (value == 2):
+				value = 1;
+				add_undo_event([Undo.set_actor_var, actor, prop, old_value, value], chrono);
+			elif (value == 1 and old_value == 2):
+				pass
+			elif (old_value == 2):
+				old_value = 1;
+				add_undo_event([Undo.set_actor_var, actor, prop, old_value, value], chrono);
 			else:
 				add_undo_event([Undo.set_actor_var, actor, prop, old_value, value], chrono);
-		
+		else:
+			add_undo_event([Undo.set_actor_var, actor, prop, old_value, value], chrono);
+
 		# sound effects for airborne changes
 		if (prop == "airborne"):
 			pass
@@ -1337,7 +1343,7 @@ func set_actor_var(actor: ActorBase, prop: String, value, chrono: int) -> void:
 #					elif value == -1 and old_value != -1:
 #						add_to_animation_server(actor, [Animation.sfx, "lightland"]);
 
-		add_to_animation_server(actor, [Animation.set_next_texture, actor.get_next_texture(), actor.facing_left])
+		add_to_animation_server(actor, [Animation.set_next_texture, actor.get_next_texture(), actor.facing_left, actor.gem_status()])
 
 func add_undo_event(event: Array, chrono: int = Chrono.MOVE) -> void:
 	if (chrono == Chrono.MOVE):
