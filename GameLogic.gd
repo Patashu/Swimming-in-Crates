@@ -693,10 +693,6 @@ func get_used_cells_by_id_one_array(id: int) -> Array:
 	return results;
 
 func make_actors() -> void:	
-	# find goals and goal-ify them
-	for layer in terrain_layers:
-		find_goals(layer);
-	
 	# find the player
 	# as a you-fucked-up backup, put them in 0,0 if there seems to be none
 	var layers_tiles = get_used_cells_by_id_all_layers(Tiles.Dolphin);
@@ -750,22 +746,7 @@ func make_actors() -> void:
 	extract_actors(Tiles.CrateSinkNothing, Actor.Name.CrateSinkNothing,
 	Heaviness.STEEL, Strength.WOODEN, Durability.FIRE, 1, false, Color(0.5, 0.5, 0.5, 1), 1, false);
 	
-func find_goals(layer: TileMap) -> void:
-	pass
-#	var heavy_goal_tiles = layer.get_used_cells_by_id(Tiles.HeavyGoal);
-#	for tile in heavy_goal_tiles:
-#		var goal = Goal.new();
-#		goal.gamelogic = self;
-#		goal.actorname = Actor.Name.HeavyGoal;
-#		goal.texture = preload("res://assets/BigPortalRed.png");
-#		goal.centered = true;
-#		goal.pos = tile;
-#		goal.position = layer.map_to_world(goal.pos) + Vector2(cell_size/2, cell_size/2);
-#		goal.modulate = Color(1, 1, 1, 0.8);
-#		goal.instantly_reach_scalify();
-#		goals.append(goal);
-#		actorsfolder.add_child(goal);
-#		goal.update_graphics();
+	find_gems();
 	
 func extract_actors(id: int, actorname: int, heaviness: int, strength: int, durability: int, fall_speed: int,
 climbs: bool, color: Color, buoyancy: int, can_swap: bool) -> void:
@@ -785,34 +766,17 @@ climbs: bool, color: Color, buoyancy: int, can_swap: bool) -> void:
 			actor.buoyancy = buoyancy;
 			actor.can_swap = can_swap;
 			actor.update_graphics();
-	
-# I think gems will use something similar when I write it
-#func find_colours() -> void:
-#	find_colour(Tiles.ColourRed, TimeColour.Red);
-#	find_colour(Tiles.ColourBlue, TimeColour.Blue);
-#	find_colour(Tiles.ColourMagenta, TimeColour.Magenta);
-#	find_colour(Tiles.ColourGray, TimeColour.Gray);
-#	find_colour(Tiles.ColourGreen, TimeColour.Green);
-#	find_colour(Tiles.ColourVoid, TimeColour.Void);
-#	find_colour(Tiles.ColourPurple, TimeColour.Purple);
-#	find_colour(Tiles.ColourBlurple, TimeColour.Blurple);
-#	find_colour(Tiles.ColourCyan, TimeColour.Cyan);
-#	find_colour(Tiles.ColourOrange, TimeColour.Orange);
-#	find_colour(Tiles.ColourYellow, TimeColour.Yellow);
-#	find_colour(Tiles.ColourWhite, TimeColour.White);
-#
-#func find_colour(id: int, time_colour : int) -> void:
-#	var layers_tiles = get_used_cells_by_id_all_layers(id);
-#	for i in range(layers_tiles.size()):
-#		var tiles = layers_tiles[i];
-#		for tile in tiles:
-#			terrain_layers[i].set_cellv(tile, -1);
-#			# get first actor with the same pos and native colour and change their time_colour
-#			for actor in actors:
-#				if actor.pos == tile and actor.is_native_colour():
-#					actor.time_colour = time_colour;
-#					actor.update_time_bubble();
-#					break;
+
+func find_gems() -> void:
+	var layers_tiles = get_used_cells_by_id_all_layers(Tiles.Gem);
+	for i in range(layers_tiles.size()):
+		var tiles = layers_tiles[i];
+		for tile in tiles:
+			terrain_layers[i].set_cellv(tile, -1);
+			# get first actor with the same pos and gemless and gem it
+			for actor in actors:
+				if actor.pos == tile and !actor.has_gem:
+					actor.gain_gem();
 	
 func calculate_map_size() -> void:
 	map_x_max = 0;

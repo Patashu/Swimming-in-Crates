@@ -16,6 +16,8 @@ var buoyancy = 0
 var can_swap = false
 var climbs = false
 var is_character = false
+var has_gem = false
+var gem = null;
 # undo trails logic
 var color = Color(1, 1, 1, 1);
 # animation system logic
@@ -86,6 +88,13 @@ func set_next_texture(tex: Texture, facing_left_at_the_time: bool) -> void:
 	
 	frame_timer = 0;
 	frame = 0;
+
+func gain_gem() -> void:
+	has_gem = true;
+	gem = Sprite.new();
+	gem.texture = preload("res://assets/gem.png");
+	gem.centered = false;
+	self.add_child(gem);
 
 # POST 'oh shit I have an infinite' gravity rules (AD07):
 # (-1 fall speed is infinite. It's so infinite it breaks glass and keeps going!)
