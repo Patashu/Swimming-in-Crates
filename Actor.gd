@@ -125,28 +125,32 @@ func phases_into_actors() -> bool:
 
 func _process(delta: float) -> void:
 	#action lines
-	if (is_character and airborne != -1):
-		action_lines_timer += delta;
-		if (action_lines_timer > action_lines_timer_max):
-			action_lines_timer -= action_lines_timer_max;
-			var sprite = Sprite.new();
-			sprite.set_script(preload("res://GoalParticle.gd"));
-			sprite.texture = preload("res://assets/action_line.png");
-			sprite.position = self.position;
-			sprite.position.x += gamelogic.rng.randf_range(0, gamelogic.cell_size);
-			sprite.position.y += gamelogic.rng.randf_range(0, gamelogic.cell_size/2);
-			if (airborne == 0):
-				sprite.velocity = Vector2(0, -16);
-			else:
-				sprite.velocity = Vector2(0, 16);
-				sprite.position.y += gamelogic.cell_size/2;
-			sprite.centered = true;
-			sprite.rotate_magnitude = 0;
-			sprite.alpha_max = 1;
-			sprite.modulate = self.modulate;
-			sprite.modulate.a = 0;
-			sprite.fadeout_timer_max = 0.75;
-			gamelogic.overactorsparticles.add_child(sprite);
+	if (airborne != -1):
+		var fall = gamelogic.falling_direction(self);
+		if (fall != Vector2.ZERO):
+			action_lines_timer += delta;
+			if (action_lines_timer > action_lines_timer_max):
+				action_lines_timer -= action_lines_timer_max;
+				var sprite = Sprite.new();
+				sprite.set_script(preload("res://GoalParticle.gd"));
+				sprite.texture = preload("res://assets/action_line.png");
+				sprite.position = self.position;
+				sprite.position.x += gamelogic.rng.randf_range(0, gamelogic.cell_size);
+				sprite.position.y += gamelogic.rng.randf_range(0, gamelogic.cell_size/2);
+
+				if (airborne == 0):
+					sprite.velocity = Vector2(0, -16*fall.y);
+				else:
+					sprite.velocity = Vector2(0, 16*fall.y);
+				if (sprite.velocity.y > 0):
+					sprite.position.y += gamelogic.cell_size/2;
+				sprite.centered = true;
+				sprite.rotate_magnitude = 0;
+				sprite.alpha_max = 1;
+				sprite.modulate = self.modulate;
+				sprite.modulate.a = 0;
+				sprite.fadeout_timer_max = 0.75;
+				gamelogic.overactorsparticles.add_child(sprite);
 	
 	#animated sprites
 	if hframes <= 1:
