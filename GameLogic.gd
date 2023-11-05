@@ -1446,14 +1446,7 @@ func finish_animations(chrono: int) -> void:
 	animation_substep = 0;
 	
 func goal_here(pos: Vector2, terrain: Array) -> bool:
-	return false;
-#	if (!joke_portals_present):
-#		return terrain.has(Tiles.HeavyGoal);
-#	else:
-#		for goal in goals:
-#			if goal.actorname == Actor.Name.HeavyGoal and goal.pos == pos:
-#				return true;
-#		return false;
+	return terrain.has(Tiles.Goal);
 	
 func check_won() -> void:
 	won = false;
