@@ -6,12 +6,22 @@ enum Tiles {
 	Wall,
 	Dolphin,
 	Goal,
-	WoodenCrate,
-	IronCrate,
-	SteelCrate,
 	Gem,
 	Switch,
 	Hatch,
+	CrateFloat,
+	CrateFloatNoPush,
+	CrateFloatNoSwap,
+	CrateFloatNothing,
+	CrateNeutral,
+	CrateNeutralNoPush,
+	CrateNeutralNoSwap,
+	CrateNeutralNothing,
+	CrateSink,
+	CrateSinkNoPush,
+	CrateSinkNoSwap,
+	CrateSinkNothing,
+	Water,
 }
 
 onready var gamelogic = get_node("/root/LevelScene").gamelogic;
@@ -56,15 +66,8 @@ func _ready() -> void:
 	
 func initialize_picker_array() -> void:		
 	picker_array.append(-1);
-	picker_array.append(Tiles.Wall);
-	picker_array.append(Tiles.Dolphin);
-	picker_array.append(Tiles.Goal);
-	picker_array.append(Tiles.WoodenCrate);
-	picker_array.append(Tiles.IronCrate);
-	picker_array.append(Tiles.SteelCrate);
-	picker_array.append(Tiles.Gem);
-	picker_array.append(Tiles.Switch);
-	picker_array.append(Tiles.Hatch);
+	for tile in Tiles.values():
+		picker_array.append(tile);
 
 	for i in range(picker_array.size()):
 		var x = i % 21;
@@ -272,14 +275,14 @@ func change_pen_tile() -> void:
 	else:
 		pen.texture = preload("res://assets/targeter.png");
 		pen.offset = Vector2(-1, -1);
-	# handle auto-tile wall icon
+	# handle auto-tile icons
 	pen.region_enabled = false;
-#	if (pen_tile == Tiles.Wall):
-#		var coord = tile_set.autotile_get_icon_coordinate(pen_tile);
-#		pen.region_enabled = true;
-#		pen.region_rect = Rect2(coord*gamelogic.cell_size, Vector2(gamelogic.cell_size, gamelogic.cell_size));
-#	else:
-#		pen.region_enabled = false;
+	if (pen_tile == Tiles.Water):
+		var coord = tile_set.autotile_get_icon_coordinate(pen_tile);
+		pen.region_enabled = true;
+		pen.region_rect = Rect2(coord*gamelogic.cell_size, Vector2(gamelogic.cell_size, gamelogic.cell_size));
+	else:
+		pen.region_enabled = false;
 
 func picker_click() -> void:
 	pen_tile = picker.get_cellv(pen_xy);
