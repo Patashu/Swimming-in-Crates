@@ -19,6 +19,8 @@ var is_character = false
 var has_gem = false
 var gem = null;
 var pressing = false;
+var open = false;
+var open_animate = false;
 # undo trails logic
 var color = Color(1, 1, 1, 1);
 # animation system logic
@@ -61,10 +63,14 @@ enum Name {
 func update_graphics() -> void:
 	var tex = get_next_texture();
 	set_next_texture(tex, facing_left, gem_status());
+	open_animate = open;
 
 func get_next_texture() -> Resource:
 	if actorname == Name.Dolphin:
 		return preload("res://assets/dolphin_idle.png");
+	elif actorname == Name.Hatch:
+		hframes = 7;
+		return preload("res://assets/hatch_spritesheet.png");
 	elif texture != null:
 		return texture;
 	else:
@@ -137,6 +143,8 @@ func pushable() -> bool:
 		return false;
 	if (broken):
 		return is_character;
+	if (open):
+		return false;
 	return true;
 		
 func phases_into_terrain() -> bool:
@@ -177,6 +185,18 @@ func _process(delta: float) -> void:
 	#animated sprites
 	if hframes <= 1:
 		pass
+	elif actorname == Name.Hatch:
+		frame_timer += delta;
+		if (frame_timer > frame_timer_max):
+			frame_timer -= frame_timer_max;
+			var impulse = -1;
+			if (open_animate):
+				impulse = 1;
+				
+			if (impulse == 1 and frame < (hframes * vframes) - 1):
+				frame += 1;
+			elif (impulse == -1 and frame > 0):
+				frame -= 1;
 	else:
 		frame_timer += delta;
 		if (frame_timer > frame_timer_max):
@@ -230,6 +250,8 @@ func _process(delta: float) -> void:
 			else:
 				is_done = false;
 				self.modulate.a = 1-(animation_timer/animation_timer_max);
+		elif (current_animation[0] == 5): #open
+			open_animate = current_animation[1];
 		if (is_done):
 			animations.pop_front();
 			animation_timer = 0;

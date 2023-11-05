@@ -93,8 +93,7 @@ enum Animation {
 	set_next_texture, #2
 	sfx, #3
 	fade, #4
-	press, #5
-	unpress, #6
+	open, #5
 }
 
 # attempted performance optimization - have an enum of all tile ids and assert at startup that they're right
@@ -151,6 +150,10 @@ var actors = []
 var goals = []
 var turn = 0;
 var undo_buffer = [];
+var buttons = []
+var reverse_buttons = {};
+var hatches = []
+var wires = []
 
 # save file, ooo!
 var save_file = {}
@@ -694,7 +697,16 @@ func get_used_cells_by_id_one_array(id: int) -> Array:
 		results.append_array(layer.get_used_cells_by_id(id));
 	return results;
 
-func make_actors() -> void:	
+func make_actors() -> void:
+	#do this all before players/crates:
+	
+	#hatches
+	extract_actors(Tiles.Hatch, Actor.Name.Hatch,
+	Heaviness.SUPERHEAVY, Strength.WOODEN, Durability.NOTHING, 0, false, Color(0.5, 0.5, 0.5, 1), 0, true);
+	
+	#setup wiring
+	setup_wiring();
+	
 	# find the player
 	# as a you-fucked-up backup, put them in 0,0 if there seems to be none
 	var layers_tiles = get_used_cells_by_id_all_layers(Tiles.Dolphin);
@@ -748,11 +760,33 @@ func make_actors() -> void:
 	extract_actors(Tiles.CrateSinkNothing, Actor.Name.CrateSinkNothing,
 	Heaviness.STEEL, Strength.WOODEN, Durability.FIRE, 1, false, Color(0.5, 0.5, 0.5, 1), 1, false);
 	
-	#hatches
-	extract_actors(Tiles.Hatch, Actor.Name.Hatch,
-	Heaviness.SUPERHEAVY, Strength.WOODEN, Durability.NOTHING, 0, false, Color(0.5, 0.5, 0.5, 1), 0, true);
+	
 	
 	find_gems();
+	
+func setup_wiring() -> void:
+	buttons = get_used_cells_by_id_one_array(Tiles.Switch);
+	buttons.sort_custom(self, "reading_order_vector");
+	reverse_buttons = {};
+	var i = 0;
+	for button in buttons:
+		reverse_buttons[button] = i;
+		i += 1;
+	hatches = actors.duplicate();
+	hatches.sort_custom(self, "reading_order_actor");
+	wires = [];
+	for j in range(buttons.size()):
+		wires.append([j, j]);
+	
+func reading_order_vector(a, b) -> bool:
+	if a.y != b.y:
+		return a.y > b.y;
+	return a.x > b.x;
+	
+func reading_order_actor(a, b) -> bool:
+	if a.pos.y != b.pos.y:
+		return a.pos.y > b.pos.y;
+	return a.pos.x > b.pos.x;
 	
 func extract_actors(id: int, actorname: int, heaviness: int, strength: int, durability: int, fall_speed: int,
 climbs: bool, color: Color, buoyancy: int, can_swap: bool) -> void:
@@ -955,6 +989,13 @@ func toggle_mute() -> void:
 	music_speaker.stream_paused = muted;
 	cut_sound();
 
+func change_pressed(actor: Actor, new_value: bool, pos: Vector2, chrono: int) -> void:
+	set_actor_var(actor, "pressing", new_value, chrono);
+	var button_id = reverse_buttons[pos];
+	for wire in wires:
+		if wire[0] == button_id:
+			set_actor_var(hatches[wire[1]], "open", new_value, chrono);
+
 func make_actor(actorname: int, pos: Vector2, is_character: bool, chrono: int = Chrono.TIMELESS) -> Actor:
 	var actor = Actor.new();
 	actors.append(actor);
@@ -991,9 +1032,9 @@ pushers_list: Array = [], is_move: bool = false, success: int = Success.No) -> i
 				
 		if actor.has_gem:
 			if actor.pressing:
-				set_actor_var(actor, "pressing", false, chrono);
+				change_pressed(actor, false, old_pos, chrono);
 			if terrain_in_tile(actor.pos).has(Tiles.Switch):
-				set_actor_var(actor, "pressing", true, chrono);
+				change_pressed(actor, true, actor.pos, chrono);
 			
 		add_undo_event([Undo.move, actor, dir], chrono);
 		
@@ -1346,8 +1387,11 @@ func set_actor_var(actor: ActorBase, prop: String, value, chrono: int) -> void:
 #						add_to_animation_server(actor, [Animation.sfx, "lightcoyote"]);
 #					elif value == -1 and old_value != -1:
 #						add_to_animation_server(actor, [Animation.sfx, "lightland"]);
-
-		add_to_animation_server(actor, [Animation.set_next_texture, actor.get_next_texture(), actor.facing_left, actor.gem_status()])
+		
+		if (prop == "open"):
+			add_to_animation_server(actor, [Animation.open, value]);
+		else:
+			add_to_animation_server(actor, [Animation.set_next_texture, actor.get_next_texture(), actor.facing_left, actor.gem_status()])
 
 func add_undo_event(event: Array, chrono: int = Chrono.MOVE) -> void:
 	if (chrono == Chrono.MOVE):
