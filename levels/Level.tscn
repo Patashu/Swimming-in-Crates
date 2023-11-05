@@ -7,8 +7,14 @@
 tile_set = ExtResource( 2 )
 cell_size = Vector2( 16, 16 )
 format = 1
-tile_data = PoolIntArray( 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 65536, 0, 0, 65540, 2, 0, 131072, 0, 0, 131076, 0, 0, 196608, 0, 0, 196609, 3, 0, 196610, 1, 0, 196612, 0, 0, 262144, 0, 0, 262145, 0, 0, 262146, 0, 0, 262147, 0, 0, 262148, 0, 0 )
+tile_data = PoolIntArray( 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 65536, 0, 0, 65540, 4, 0, 65542, 0, 0, 131072, 0, 0, 131076, 0, 0, 131078, 0, 0, 196608, 0, 0, 196609, 6, 0, 196610, 1, 0, 196611, 4, 0, 196612, 0, 0, 196613, 2, 0, 196614, 0, 0, 262144, 0, 0, 262145, 0, 0, 262146, 0, 0, 262147, 0, 0, 262148, 0, 0, 262149, 0, 0, 262150, 0, 0 )
 
 [node name="LevelInfo" type="Node" parent="."]
 script = ExtResource( 1 )
 level_name = "Swimming in Crates"
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = ExtResource( 2 )
+cell_size = Vector2( 16, 16 )
+format = 1
+tile_data = PoolIntArray( 196609, 3, 0 )

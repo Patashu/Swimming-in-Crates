@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=10 format=2]
+[gd_resource type="TileSet" load_steps=20 format=2]
 
 [ext_resource path="res://assets/dolphin_idle.png" type="Texture" id=1]
 [ext_resource path="res://assets/switch.png" type="Texture" id=2]
@@ -6,9 +6,19 @@
 [ext_resource path="res://assets/wall.png" type="Texture" id=4]
 [ext_resource path="res://assets/gem.png" type="Texture" id=5]
 [ext_resource path="res://assets/goal.png" type="Texture" id=6]
-[ext_resource path="res://assets/iron_crate.png" type="Texture" id=7]
-[ext_resource path="res://assets/wooden_crate.png" type="Texture" id=12]
-[ext_resource path="res://assets/steel_crate.png" type="Texture" id=14]
+[ext_resource path="res://assets/cratefloatnoswap.png" type="Texture" id=7]
+[ext_resource path="res://assets/cratefloat.png" type="Texture" id=8]
+[ext_resource path="res://assets/crateneutralnoswap.png" type="Texture" id=9]
+[ext_resource path="res://assets/cratesinknopush.png" type="Texture" id=10]
+[ext_resource path="res://assets/cratefloatnopush.png" type="Texture" id=11]
+[ext_resource path="res://assets/cratefloatnothing.png" type="Texture" id=12]
+[ext_resource path="res://assets/crateneutralnopush.png" type="Texture" id=13]
+[ext_resource path="res://assets/cratesinknoswap.png" type="Texture" id=14]
+[ext_resource path="res://assets/cratesinknothing.png" type="Texture" id=15]
+[ext_resource path="res://assets/cratesink.png" type="Texture" id=16]
+[ext_resource path="res://assets/crateneutral.png" type="Texture" id=17]
+[ext_resource path="res://assets/crateneutralnothing.png" type="Texture" id=18]
+[ext_resource path="res://assets/water.png" type="Texture" id=19]
 
 [resource]
 0/name = "Wall"
@@ -53,8 +63,8 @@
 2/shape_one_way_margin = 0.0
 2/shapes = [  ]
 2/z_index = 0
-3/name = "WoodenCrate"
-3/texture = ExtResource( 12 )
+3/name = "Gem"
+3/texture = ExtResource( 5 )
 3/tex_offset = Vector2( 0, 0 )
 3/modulate = Color( 1, 1, 1, 1 )
 3/region = Rect2( 0, 0, 16, 16 )
@@ -67,8 +77,8 @@
 3/shape_one_way_margin = 0.0
 3/shapes = [  ]
 3/z_index = 0
-4/name = "IronCrate"
-4/texture = ExtResource( 7 )
+4/name = "Switch"
+4/texture = ExtResource( 2 )
 4/tex_offset = Vector2( 0, 0 )
 4/modulate = Color( 1, 1, 1, 1 )
 4/region = Rect2( 0, 0, 16, 16 )
@@ -81,8 +91,8 @@
 4/shape_one_way_margin = 0.0
 4/shapes = [  ]
 4/z_index = 0
-5/name = "SteelCrate"
-5/texture = ExtResource( 14 )
+5/name = "Hatch"
+5/texture = ExtResource( 3 )
 5/tex_offset = Vector2( 0, 0 )
 5/modulate = Color( 1, 1, 1, 1 )
 5/region = Rect2( 0, 0, 16, 16 )
@@ -95,8 +105,8 @@
 5/shape_one_way_margin = 0.0
 5/shapes = [  ]
 5/z_index = 0
-6/name = "Gem"
-6/texture = ExtResource( 5 )
+6/name = "CrateFloat"
+6/texture = ExtResource( 8 )
 6/tex_offset = Vector2( 0, 0 )
 6/modulate = Color( 1, 1, 1, 1 )
 6/region = Rect2( 0, 0, 16, 16 )
@@ -109,8 +119,8 @@
 6/shape_one_way_margin = 0.0
 6/shapes = [  ]
 6/z_index = 0
-7/name = "Switch"
-7/texture = ExtResource( 2 )
+7/name = "CrateFloatNoPush"
+7/texture = ExtResource( 11 )
 7/tex_offset = Vector2( 0, 0 )
 7/modulate = Color( 1, 1, 1, 1 )
 7/region = Rect2( 0, 0, 16, 16 )
@@ -123,8 +133,8 @@
 7/shape_one_way_margin = 0.0
 7/shapes = [  ]
 7/z_index = 0
-8/name = "Hatch"
-8/texture = ExtResource( 3 )
+8/name = "CrateFloatNoSwap"
+8/texture = ExtResource( 7 )
 8/tex_offset = Vector2( 0, 0 )
 8/modulate = Color( 1, 1, 1, 1 )
 8/region = Rect2( 0, 0, 16, 16 )
@@ -137,3 +147,166 @@
 8/shape_one_way_margin = 0.0
 8/shapes = [  ]
 8/z_index = 0
+9/name = "CrateFloatNothing"
+9/texture = ExtResource( 12 )
+9/tex_offset = Vector2( 0, 0 )
+9/modulate = Color( 1, 1, 1, 1 )
+9/region = Rect2( 0, 0, 16, 16 )
+9/tile_mode = 0
+9/occluder_offset = Vector2( 8, 8 )
+9/navigation_offset = Vector2( 8, 8 )
+9/shape_offset = Vector2( 0, 0 )
+9/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+9/shape_one_way = false
+9/shape_one_way_margin = 0.0
+9/shapes = [  ]
+9/z_index = 0
+10/name = "CrateNeutral"
+10/texture = ExtResource( 17 )
+10/tex_offset = Vector2( 0, 0 )
+10/modulate = Color( 1, 1, 1, 1 )
+10/region = Rect2( 0, 0, 16, 16 )
+10/tile_mode = 0
+10/occluder_offset = Vector2( 8, 8 )
+10/navigation_offset = Vector2( 8, 8 )
+10/shape_offset = Vector2( 0, 0 )
+10/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+10/shape_one_way = false
+10/shape_one_way_margin = 0.0
+10/shapes = [  ]
+10/z_index = 0
+11/name = "CrateNeutralNoPush"
+11/texture = ExtResource( 13 )
+11/tex_offset = Vector2( 0, 0 )
+11/modulate = Color( 1, 1, 1, 1 )
+11/region = Rect2( 0, 0, 16, 16 )
+11/tile_mode = 0
+11/occluder_offset = Vector2( 8, 8 )
+11/navigation_offset = Vector2( 8, 8 )
+11/shape_offset = Vector2( 0, 0 )
+11/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+11/shape_one_way = false
+11/shape_one_way_margin = 0.0
+11/shapes = [  ]
+11/z_index = 0
+12/name = "CrateNeutralNoSwap"
+12/texture = ExtResource( 9 )
+12/tex_offset = Vector2( 0, 0 )
+12/modulate = Color( 1, 1, 1, 1 )
+12/region = Rect2( 0, 0, 16, 16 )
+12/tile_mode = 0
+12/occluder_offset = Vector2( 8, 8 )
+12/navigation_offset = Vector2( 8, 8 )
+12/shape_offset = Vector2( 0, 0 )
+12/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+12/shape_one_way = false
+12/shape_one_way_margin = 0.0
+12/shapes = [  ]
+12/z_index = 0
+13/name = "CrateNeutralNothing"
+13/texture = ExtResource( 18 )
+13/tex_offset = Vector2( 0, 0 )
+13/modulate = Color( 1, 1, 1, 1 )
+13/region = Rect2( 0, 0, 16, 16 )
+13/tile_mode = 0
+13/occluder_offset = Vector2( 8, 8 )
+13/navigation_offset = Vector2( 8, 8 )
+13/shape_offset = Vector2( 0, 0 )
+13/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+13/shape_one_way = false
+13/shape_one_way_margin = 0.0
+13/shapes = [  ]
+13/z_index = 0
+14/name = "CrateSink"
+14/texture = ExtResource( 16 )
+14/tex_offset = Vector2( 0, 0 )
+14/modulate = Color( 1, 1, 1, 1 )
+14/region = Rect2( 0, 0, 16, 16 )
+14/tile_mode = 0
+14/occluder_offset = Vector2( 8, 8 )
+14/navigation_offset = Vector2( 8, 8 )
+14/shape_offset = Vector2( 0, 0 )
+14/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+14/shape_one_way = false
+14/shape_one_way_margin = 0.0
+14/shapes = [  ]
+14/z_index = 0
+15/name = "CrateSinkNoPush"
+15/texture = ExtResource( 10 )
+15/tex_offset = Vector2( 0, 0 )
+15/modulate = Color( 1, 1, 1, 1 )
+15/region = Rect2( 0, 0, 16, 16 )
+15/tile_mode = 0
+15/occluder_offset = Vector2( 8, 8 )
+15/navigation_offset = Vector2( 8, 8 )
+15/shape_offset = Vector2( 0, 0 )
+15/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+15/shape_one_way = false
+15/shape_one_way_margin = 0.0
+15/shapes = [  ]
+15/z_index = 0
+16/name = "CrateSinkNoSwap"
+16/texture = ExtResource( 14 )
+16/tex_offset = Vector2( 0, 0 )
+16/modulate = Color( 1, 1, 1, 1 )
+16/region = Rect2( 0, 0, 16, 16 )
+16/tile_mode = 0
+16/occluder_offset = Vector2( 8, 8 )
+16/navigation_offset = Vector2( 8, 8 )
+16/shape_offset = Vector2( 0, 0 )
+16/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+16/shape_one_way = false
+16/shape_one_way_margin = 0.0
+16/shapes = [  ]
+16/z_index = 0
+17/name = "CrateSinkNothing"
+17/texture = ExtResource( 15 )
+17/tex_offset = Vector2( 0, 0 )
+17/modulate = Color( 1, 1, 1, 1 )
+17/region = Rect2( 0, 0, 16, 16 )
+17/tile_mode = 0
+17/occluder_offset = Vector2( 8, 8 )
+17/navigation_offset = Vector2( 8, 8 )
+17/shape_offset = Vector2( 0, 0 )
+17/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+17/shape_one_way = false
+17/shape_one_way_margin = 0.0
+17/shapes = [  ]
+17/z_index = 0
+18/name = "Water"
+18/texture = ExtResource( 19 )
+18/tex_offset = Vector2( 0, 0 )
+18/modulate = Color( 1, 1, 1, 1 )
+18/region = Rect2( 120, 216, 24, 24 )
+18/tile_mode = 0
+18/occluder_offset = Vector2( 72, 120 )
+18/navigation_offset = Vector2( 72, 120 )
+18/shape_offset = Vector2( 0, 0 )
+18/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+18/shape_one_way = false
+18/shape_one_way_margin = 0.0
+18/shapes = [  ]
+18/z_index = 0
+19/name = "water.png 19"
+19/texture = ExtResource( 19 )
+19/tex_offset = Vector2( 0, 0 )
+19/modulate = Color( 1, 1, 1, 1 )
+19/region = Rect2( 0, 0, 144, 240 )
+19/tile_mode = 1
+19/autotile/bitmask_mode = 1
+19/autotile/bitmask_flags = [ Vector2( 0, 9 ), 182, Vector2( 1, 3 ), 144, Vector2( 1, 4 ), 146, Vector2( 1, 5 ), 18, Vector2( 1, 9 ), 434, Vector2( 2, 0 ), 432, Vector2( 2, 1 ), 438, Vector2( 2, 2 ), 54, Vector2( 2, 8 ), 176, Vector2( 2, 9 ), 178, Vector2( 2, 10 ), 50, Vector2( 3, 0 ), 504, Vector2( 3, 1 ), 511, Vector2( 3, 2 ), 63, Vector2( 3, 6 ), 440, Vector2( 3, 7 ), 248, Vector2( 3, 8 ), 184, Vector2( 3, 9 ), 186, Vector2( 3, 10 ), 58, Vector2( 3, 11 ), 62, Vector2( 3, 12 ), 59, Vector2( 4, 0 ), 216, Vector2( 4, 1 ), 219, Vector2( 4, 2 ), 27, Vector2( 4, 4 ), 16, Vector2( 4, 8 ), 152, Vector2( 4, 9 ), 154, Vector2( 4, 10 ), 26, Vector2( 5, 3 ), 48, Vector2( 5, 9 ), 155, Vector2( 5, 11 ), 190, Vector2( 5, 12 ), 446, Vector2( 5, 13 ), 443, Vector2( 5, 14 ), 510, Vector2( 6, 3 ), 56, Vector2( 6, 9 ), 218, Vector2( 6, 11 ), 187, Vector2( 6, 12 ), 251, Vector2( 6, 13 ), 254, Vector2( 6, 14 ), 507, Vector2( 7, 3 ), 24, Vector2( 7, 11 ), 442, Vector2( 7, 12 ), 191, Vector2( 7, 14 ), 255, Vector2( 8, 11 ), 250, Vector2( 8, 12 ), 506, Vector2( 8, 14 ), 447 ]
+19/autotile/icon_coordinate = Vector2( 4, 4 )
+19/autotile/tile_size = Vector2( 16, 16 )
+19/autotile/spacing = 0
+19/autotile/occluder_map = [  ]
+19/autotile/navpoly_map = [  ]
+19/autotile/priority_map = [  ]
+19/autotile/z_index_map = [  ]
+19/occluder_offset = Vector2( 0, 0 )
+19/navigation_offset = Vector2( 0, 0 )
+19/shape_offset = Vector2( 0, 0 )
+19/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+19/shape_one_way = false
+19/shape_one_way_margin = 0.0
+19/shapes = [  ]
+19/z_index = 0

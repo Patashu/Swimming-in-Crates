@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/iron_crate.png-4bfdc270a9999ba1c37264064b2b63e1.stex"
+path="res://.import/cratefloatnothing.png-36b4874c64bd7b36c6458fdd05e5131a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/iron_crate.png"
-dest_files=[ "res://.import/iron_crate.png-4bfdc270a9999ba1c37264064b2b63e1.stex" ]
+source_file="res://assets/cratefloatnothing.png"
+dest_files=[ "res://.import/cratefloatnothing.png-36b4874c64bd7b36c6458fdd05e5131a.stex" ]
 
 [params]
 

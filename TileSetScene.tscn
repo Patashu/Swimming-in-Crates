@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://assets/dolphin_idle.png" type="Texture" id=1]
 [ext_resource path="res://assets/switch.png" type="Texture" id=2]
@@ -6,9 +6,19 @@
 [ext_resource path="res://assets/wall.png" type="Texture" id=4]
 [ext_resource path="res://assets/gem.png" type="Texture" id=5]
 [ext_resource path="res://assets/goal.png" type="Texture" id=6]
-[ext_resource path="res://assets/iron_crate.png" type="Texture" id=7]
-[ext_resource path="res://assets/wooden_crate.png" type="Texture" id=12]
-[ext_resource path="res://assets/steel_crate.png" type="Texture" id=14]
+[ext_resource path="res://assets/cratefloatnoswap.png" type="Texture" id=7]
+[ext_resource path="res://assets/cratefloat.png" type="Texture" id=8]
+[ext_resource path="res://assets/crateneutralnoswap.png" type="Texture" id=9]
+[ext_resource path="res://assets/cratesinknopush.png" type="Texture" id=10]
+[ext_resource path="res://assets/cratefloatnopush.png" type="Texture" id=11]
+[ext_resource path="res://assets/cratefloatnothing.png" type="Texture" id=12]
+[ext_resource path="res://assets/crateneutralnopush.png" type="Texture" id=13]
+[ext_resource path="res://assets/cratesinknoswap.png" type="Texture" id=14]
+[ext_resource path="res://assets/cratesinknothing.png" type="Texture" id=15]
+[ext_resource path="res://assets/cratesink.png" type="Texture" id=16]
+[ext_resource path="res://assets/crateneutral.png" type="Texture" id=17]
+[ext_resource path="res://assets/crateneutralnothing.png" type="Texture" id=18]
+[ext_resource path="res://assets/water.png" type="Texture" id=19]
 
 [node name="TileSetScene" type="Node2D"]
 
@@ -24,18 +34,6 @@ texture = ExtResource( 1 )
 position = Vector2( 226, 117 )
 texture = ExtResource( 6 )
 
-[node name="WoodenCrate" type="Sprite" parent="."]
-position = Vector2( 253, 117 )
-texture = ExtResource( 12 )
-
-[node name="IronCrate" type="Sprite" parent="."]
-position = Vector2( 273, 116 )
-texture = ExtResource( 7 )
-
-[node name="SteelCrate" type="Sprite" parent="."]
-position = Vector2( 294, 115 )
-texture = ExtResource( 14 )
-
 [node name="Gem" type="Sprite" parent="."]
 position = Vector2( 316, 115 )
 texture = ExtResource( 5 )
@@ -47,3 +45,55 @@ texture = ExtResource( 2 )
 [node name="Hatch" type="Sprite" parent="."]
 position = Vector2( 362, 119 )
 texture = ExtResource( 3 )
+
+[node name="CrateFloat" type="Sprite" parent="."]
+position = Vector2( 232, 148 )
+texture = ExtResource( 8 )
+
+[node name="CrateFloatNoPush" type="Sprite" parent="."]
+position = Vector2( 232, 148 )
+texture = ExtResource( 11 )
+
+[node name="CrateFloatNoSwap" type="Sprite" parent="."]
+position = Vector2( 232, 148 )
+texture = ExtResource( 7 )
+
+[node name="CrateFloatNothing" type="Sprite" parent="."]
+position = Vector2( 232, 148 )
+texture = ExtResource( 12 )
+
+[node name="CrateNeutral" type="Sprite" parent="."]
+position = Vector2( 232, 148 )
+texture = ExtResource( 17 )
+
+[node name="CrateNeutralNoPush" type="Sprite" parent="."]
+position = Vector2( 232, 148 )
+texture = ExtResource( 13 )
+
+[node name="CrateNeutralNoSwap" type="Sprite" parent="."]
+position = Vector2( 232, 148 )
+texture = ExtResource( 9 )
+
+[node name="CrateNeutralNothing" type="Sprite" parent="."]
+position = Vector2( 232, 148 )
+texture = ExtResource( 18 )
+
+[node name="CrateSink" type="Sprite" parent="."]
+position = Vector2( 232, 148 )
+texture = ExtResource( 16 )
+
+[node name="CrateSinkNoPush" type="Sprite" parent="."]
+position = Vector2( 232, 148 )
+texture = ExtResource( 10 )
+
+[node name="CrateSinkNoSwap" type="Sprite" parent="."]
+position = Vector2( 232, 148 )
+texture = ExtResource( 14 )
+
+[node name="CrateSinkNothing" type="Sprite" parent="."]
+position = Vector2( 232, 148 )
+texture = ExtResource( 15 )
+
+[node name="Water" type="Sprite" parent="."]
+position = Vector2( 75, 130 )
+texture = ExtResource( 19 )

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/steel_crate.png-85abf3295010e5f897aa8c31856f9c13.stex"
+path="res://.import/dolphin third frame change.png-1969410a169a5276930131ed9bf1c62b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/steel_crate.png"
-dest_files=[ "res://.import/steel_crate.png-85abf3295010e5f897aa8c31856f9c13.stex" ]
+source_file="res://assets/dolphin third frame change.png"
+dest_files=[ "res://.import/dolphin third frame change.png-1969410a169a5276930131ed9bf1c62b.stex" ]
 
 [params]
 
