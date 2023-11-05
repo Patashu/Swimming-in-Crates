@@ -1213,14 +1213,6 @@ chrono: int) -> int:
 			return result;
 	return result;
 	
-func is_suspended(actor: Actor):
-	#PERF: could try caching this and only updating it when an actor moves or breaks
-	if (!actor.climbs()):
-		return false;
-	var terrain = terrain_in_tile(actor.pos);
-	return false;
-	#return terrain.has(Tiles.Ladder) || terrain.has(Tiles.LadderPlatform);
-
 func terrain_is_hazardous(actor: Actor, pos: Vector2) -> int:
 #	if (pos.y > map_y_max and actor.durability <= Durability.PITS):
 #		return Durability.PITS;
@@ -1827,7 +1819,7 @@ func character_move(dir: Vector2) -> bool:
 	if (result == Success.Yes):
 		play_sound("step");
 		if (dir == Vector2.UP):
-			if !is_suspended(player):
+			if falling_direction(player) != Vector2.ZERO:
 				set_actor_var(player, "airborne", 2, Chrono.MOVE);
 		elif (dir == Vector2.DOWN):
 			pass
@@ -1851,6 +1843,24 @@ func anything_happened(destructive: bool = true) -> bool:
 			return true;
 	undo_buffer.pop_at(turn);
 	return false;
+
+func falling_direction(actor: Actor) -> Vector2:
+	# logic: floating things float up to and on top of water. neutral things float if in water. sinking things sink.
+	if actor.buoyancy > 0:
+		return Vector2.DOWN; #always falls
+	elif actor.buoyancy == 0:
+		var terrain = terrain_in_tile(actor.pos);
+		if terrain.has(Tiles.Water):
+			return Vector2.ZERO;
+		return Vector2.DOWN;
+	else: #actor.buoyancy < 0:
+		var terrain = terrain_in_tile(actor.pos);
+		if terrain.has(Tiles.Water):
+			return Vector2.UP;
+		terrain = terrain_in_tile(actor.pos + Vector2.DOWN);
+		if terrain.has(Tiles.Water):
+			return Vector2.ZERO;
+		return Vector2.DOWN;
 
 func time_passes(chrono: int) -> void:
 	animation_substep(chrono);
@@ -1908,8 +1918,9 @@ func time_passes(chrono: int) -> void:
 			else:
 				clear_just_moveds = true;
 			
-			if actor.airborne == -1 and !is_suspended(actor):
-				var could_fall = try_enter(actor, Vector2.DOWN, chrono, true, true, true);
+			var fall = falling_direction(actor);
+			if actor.airborne == -1 and fall != Vector2.ZERO:
+				var could_fall = try_enter(actor, fall, chrono, true, true, true);
 				# we'll say that falling due to gravity onto spikes/a pressure plate makes you airborne so we try to do it, but only once
 				if (could_fall != Success.No and (could_fall == Success.Yes or has_fallen[actor] <= 0)):
 					if actor.floats():
@@ -1920,10 +1931,10 @@ func time_passes(chrono: int) -> void:
 			
 			if actor.airborne == 0:
 				var did_fall = Success.No;
-				if (is_suspended(actor)):
+				if (fall == Vector2.ZERO):
 					did_fall = Success.No;
 				else:
-					did_fall = move_actor_relative(actor, Vector2.DOWN, chrono, false, true);
+					did_fall = move_actor_relative(actor, fall, chrono, false, true);
 				
 				if (did_fall != Success.No):
 					something_happened = true;
@@ -1956,10 +1967,11 @@ func time_passes(chrono: int) -> void:
 	#and now it definitely sucks.
 	for actor in time_actors:
 		if (actor.airborne == 0):
-			if is_suspended(actor):
+			var fall = falling_direction(actor);
+			if fall == Vector2.ZERO:
 				set_actor_var(actor, "airborne", -1, chrono);
 				continue;
-			var could_fall = try_enter(actor, Vector2.DOWN, chrono, false, true, true);
+			var could_fall = try_enter(actor, fall, chrono, false, true, true);
 			if (could_fall == Success.No):
 				set_actor_var(actor, "airborne", -1, chrono);
 				continue;
