@@ -12,6 +12,8 @@ var strength = 0
 var heaviness = 0
 var durability = 0
 var fall_speed = -1
+var buoyancy = 0
+var can_swap = false
 var climbs = false
 var is_character = false
 # undo trails logic
@@ -38,25 +40,32 @@ var action_lines_timer_max = 0.25;
 # faster than string comparisons
 enum Name {
 	Dolphin,
-	WoodenCrate,
-	IronCrate,
-	SteelCrate,
 	Goal,
+	CrateFloat,
+	CrateFloatNoPush,
+	CrateFloatNoSwap,
+	CrateFloatNothing,
+	CrateNeutral,
+	CrateNeutralNoPush,
+	CrateNeutralNoSwap,
+	CrateNeutralNothing,
+	CrateSink,
+	CrateSinkNoPush,
+	CrateSinkNoSwap,
+	CrateSinkNothing,
 }
 
 func update_graphics() -> void:
 	var tex = get_next_texture();
 	set_next_texture(tex, facing_left);
 
-func get_next_texture() -> Texture:
+func get_next_texture() -> Resource:
 	if actorname == Name.Dolphin:
 		return preload("res://assets/dolphin_idle.png");
-	elif actorname == Name.IronCrate:
-		return preload("res://assets/iron_crate.png");
-	elif actorname == Name.SteelCrate:
-		return preload("res://assets/steel_crate.png");
-	elif actorname == Name.WoodenCrate:
-		return preload("res://assets/wooden_crate.png");
+	elif texture != null:
+		return texture;
+	else:
+		return load("res://assets/" + Name.keys()[actorname].to_lower() + ".png");
 	return null;
 
 func set_next_texture(tex: Texture, facing_left_at_the_time: bool) -> void:

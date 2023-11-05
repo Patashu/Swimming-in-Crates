@@ -102,12 +102,22 @@ enum Tiles {
 	Wall,
 	Dolphin,
 	Goal,
-	WoodenCrate,
-	IronCrate,
-	SteelCrate,
 	Gem,
 	Switch,
 	Hatch,
+	CrateFloat,
+	CrateFloatNoPush,
+	CrateFloatNoSwap,
+	CrateFloatNothing,
+	CrateNeutral,
+	CrateNeutralNoPush,
+	CrateNeutralNoSwap,
+	CrateNeutralNothing,
+	CrateSink,
+	CrateSinkNoPush,
+	CrateSinkNoSwap,
+	CrateSinkNothing,
+	Water,
 }
 
 # information about the level
@@ -713,10 +723,33 @@ func make_actors() -> void:
 			player.update_graphics();
 	
 	# crates
-	extract_actors(Tiles.IronCrate, Actor.Name.IronCrate, Heaviness.IRON, Strength.WOODEN, Durability.FIRE, 99, false, Color(0.5, 0.5, 0.5, 1));
-	extract_actors(Tiles.SteelCrate, Actor.Name.SteelCrate, Heaviness.STEEL, Strength.LIGHT, Durability.PITS, 99, false, Color(0.25, 0.25, 0.25, 1));
-	extract_actors(Tiles.WoodenCrate, Actor.Name.WoodenCrate, Heaviness.WOODEN, Strength.WOODEN, Durability.SPIKES, 99, false, Color(0.5, 0.25, 0, 1));
-
+	extract_actors(Tiles.CrateFloat, Actor.Name.CrateFloat,
+	Heaviness.IRON, Strength.WOODEN, Durability.FIRE, 1, false, Color(0.5, 0.5, 0.5, 1), -1, true);
+	extract_actors(Tiles.CrateFloatNoPush, Actor.Name.CrateFloatNoPush,
+	Heaviness.STEEL, Strength.WOODEN, Durability.FIRE, 1, false, Color(0.5, 0.5, 0.5, 1), -1, true);
+	extract_actors(Tiles.CrateFloatNoSwap, Actor.Name.CrateFloatNoSwap,
+	Heaviness.IRON, Strength.WOODEN, Durability.FIRE, 1, false, Color(0.5, 0.5, 0.5, 1), -1, false);
+	extract_actors(Tiles.CrateFloatNothing, Actor.Name.CrateFloatNothing,
+	Heaviness.STEEL, Strength.WOODEN, Durability.FIRE, 1, false, Color(0.5, 0.5, 0.5, 1), -1, false);
+	
+	extract_actors(Tiles.CrateNeutral, Actor.Name.CrateNeutral,
+	Heaviness.IRON, Strength.WOODEN, Durability.FIRE, 1, false, Color(0.5, 0.5, 0.5, 1), 0, true);
+	extract_actors(Tiles.CrateNeutralNoPush, Actor.Name.CrateNeutralNoPush,
+	Heaviness.STEEL, Strength.WOODEN, Durability.FIRE, 1, false, Color(0.5, 0.5, 0.5, 1), 0, true);
+	extract_actors(Tiles.CrateNeutralNoSwap, Actor.Name.CrateNeutralNoSwap,
+	Heaviness.IRON, Strength.WOODEN, Durability.FIRE, 1, false, Color(0.5, 0.5, 0.5, 1), 0, false);
+	extract_actors(Tiles.CrateNeutralNothing, Actor.Name.CrateNeutralNothing,
+	Heaviness.STEEL, Strength.WOODEN, Durability.FIRE, 1, false, Color(0.5, 0.5, 0.5, 1), 0, false);
+	
+	extract_actors(Tiles.CrateSink, Actor.Name.CrateSink,
+	Heaviness.IRON, Strength.WOODEN, Durability.FIRE, 1, false, Color(0.5, 0.5, 0.5, 1), 1, true);
+	extract_actors(Tiles.CrateSinkNoPush, Actor.Name.CrateSinkNoPush,
+	Heaviness.STEEL, Strength.WOODEN, Durability.FIRE, 1, false, Color(0.5, 0.5, 0.5, 1), 1, true);
+	extract_actors(Tiles.CrateSinkNoSwap, Actor.Name.CrateSinkNoSwap,
+	Heaviness.IRON, Strength.WOODEN, Durability.FIRE, 1, false, Color(0.5, 0.5, 0.5, 1), 1, false);
+	extract_actors(Tiles.CrateSinkNothing, Actor.Name.CrateSinkNothing,
+	Heaviness.STEEL, Strength.WOODEN, Durability.FIRE, 1, false, Color(0.5, 0.5, 0.5, 1), 1, false);
+	
 func find_goals(layer: TileMap) -> void:
 	pass
 #	var heavy_goal_tiles = layer.get_used_cells_by_id(Tiles.HeavyGoal);
@@ -734,7 +767,8 @@ func find_goals(layer: TileMap) -> void:
 #		actorsfolder.add_child(goal);
 #		goal.update_graphics();
 	
-func extract_actors(id: int, actorname: int, heaviness: int, strength: int, durability: int, fall_speed: int, climbs: bool, color: Color) -> void:
+func extract_actors(id: int, actorname: int, heaviness: int, strength: int, durability: int, fall_speed: int,
+climbs: bool, color: Color, buoyancy: int, can_swap: bool) -> void:
 	var layers_tiles = get_used_cells_by_id_all_layers(id);
 	for i in range(layers_tiles.size()):
 		var tiles = layers_tiles[i];
@@ -748,6 +782,8 @@ func extract_actors(id: int, actorname: int, heaviness: int, strength: int, dura
 			actor.climbs = climbs;
 			actor.is_character = false;
 			actor.color = color;
+			actor.buoyancy = buoyancy;
+			actor.can_swap = can_swap;
 			actor.update_graphics();
 	
 # I think gems will use something similar when I write it
@@ -963,18 +999,19 @@ func make_actor(actorname: int, pos: Vector2, is_character: bool, chrono: int = 
 	return actor;
 
 func move_actor_relative(actor: Actor, dir: Vector2, chrono: int, hypothetical: bool, is_gravity: bool,
-pushers_list: Array = [], is_move: bool = false) -> int:
+pushers_list: Array = [], is_move: bool = false, success: int = Success.No) -> int:
 	return move_actor_to(actor, actor.pos + dir, chrono, hypothetical,
-	is_gravity, pushers_list, is_move);
+	is_gravity, pushers_list, is_move, success);
 	
 func move_actor_to(actor: Actor, pos: Vector2, chrono: int, hypothetical: bool, is_gravity: bool,
-pushers_list: Array = [], is_move: bool = false) -> int:
+pushers_list: Array = [], is_move: bool = false, success: int = Success.No) -> int:
 	var dir = pos - actor.pos;
 	var old_pos = actor.pos;
 	
-	var success = try_enter(actor, dir, chrono, true, hypothetical, is_gravity, pushers_list);
+	if (success == Success.No):
+		success = try_enter(actor, dir, chrono, true, hypothetical, is_gravity, pushers_list);
 	if (success == Success.Yes and !hypothetical):
-		actor.pos = pos;			
+		actor.pos = pos;
 		# do facing change now before move happens
 		if (is_move and actor.is_character):
 			if (dir == Vector2.LEFT and !actor.facing_left):
@@ -1255,34 +1292,12 @@ pushers_list: Array = []) -> int:
 					pushables_there.clear();
 					result = Success.Yes;
 					break;
-				elif (!actor.broken and pushables_there.size() == 1 and actor_there.actorname == Actor.Name.WoodenCrate and actor.is_character and !is_gravity):
-					# 'Wooden Crates special moves'
-					# When making a non-gravity move, if the push fails, unbroken Heavy can break a solo Wooden Crate, unbroken Light can push a Wooden Crate upwards.
-					# since wooden crate did a bump, robot needs to do a bump too to sync up animations
-					# should be OK to have the nonce be -1 since the real thing will still happen?
+				elif (!actor.broken and pushables_there.size() == 1 and actor_there.can_swap and actor.is_character and !is_gravity):
+					# When making a non-gravity move, if the push fails, Dolphin can swap with a swappable crate.
+					# since swappable crate did a bump, Dolphin needs to do a bump too to sync up animations
 					add_to_animation_server(actor, [Animation.bump, dir, -1]);
-					# TODO: write swap for wooden crate and steel crate here
-#					if actor.actorname == Actor.Name.Heavy:
-#						set_actor_var(actor_there, "broken", true, chrono);
-#					elif actor.actorname == Actor.Name.Light:
-#						dir = Vector2.UP;
-#						# check again if we can push it up
-#						actor_there_result = move_actor_relative(actor_there, dir, chrono, true, is_gravity, pushers_list);
-#						if (actor_there_result == Success.No):
-#							pushers_list.pop_front();
-#							return Success.No;
-#						elif(actor_there_result == Success.Surprise):
-#							result = Success.Surprise;
-#							surprises.append(actor_there);
-				elif (!actor.broken and pushables_there.size() == 1 and actor.actorname == Actor.Name.SteelCrate and !actor_there.broken and (actor_there.actorname == Actor.Name.Light or actor_there.actorname == Actor.Name.CuckooClock)):
-					add_to_animation_server(actor, [Animation.bump, dir, -1]);
-					# TODO: write swap for wooden crate and steel crate here
-					# 'Steel Crates special moves'
-					# If an unbroken steel crate tries to move into a solo unbroken Light or Cuckoo Clock for any reason, the target first breaks.
-					# this also cancels the pusher's move which is janky but fuck it, I don't feel like fixing the jank for a non main campaign edge case
-					#result = Success.Surprise;
-					#add_to_animation_server(actor, [Animation.bump, dir, -1]);
-					#set_actor_var(actor_there, "broken", true, chrono);
+					move_actor_relative(actor_there, -dir, chrono, false, is_gravity, [], false, Success.Yes);
+					pushables_there.erase(actor_there);
 				else:
 					pushers_list.pop_front();
 					return Success.No;
@@ -1397,6 +1412,8 @@ func clone_actor_but_dont_add_it(actor : Actor) -> Actor:
 	new.durability = actor.durability;
 	new.fall_speed = actor.fall_speed;
 	new.climbs = actor.climbs;
+	new.buoyancy = actor.buoyancy;
+	new.can_swap = actor.can_swap;
 	new.is_character = actor.is_character;
 	new.facing_left = actor.facing_left;
 	new.flip_h = actor.flip_h;
