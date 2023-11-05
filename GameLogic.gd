@@ -748,6 +748,10 @@ func make_actors() -> void:
 	extract_actors(Tiles.CrateSinkNothing, Actor.Name.CrateSinkNothing,
 	Heaviness.STEEL, Strength.WOODEN, Durability.FIRE, 1, false, Color(0.5, 0.5, 0.5, 1), 1, false);
 	
+	#hatches
+	extract_actors(Tiles.Hatch, Actor.Name.Hatch,
+	Heaviness.SUPERHEAVY, Strength.WOODEN, Durability.NOTHING, 0, false, Color(0.5, 0.5, 0.5, 1), 0, true);
+	
 	find_gems();
 	
 func extract_actors(id: int, actorname: int, heaviness: int, strength: int, durability: int, fall_speed: int,

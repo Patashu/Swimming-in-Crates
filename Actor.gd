@@ -43,6 +43,7 @@ var action_lines_timer_max = 0.25;
 # faster than string comparisons
 enum Name {
 	Dolphin,
+	Hatch,
 	CrateFloat,
 	CrateFloatNoPush,
 	CrateFloatNoSwap,
