@@ -1,14 +1,17 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://DefaultTiles.tres" type="TileSet" id=1]
 [ext_resource path="res://DefaultTheme.tres" type="Theme" id=2]
 [ext_resource path="res://GameLogic.gd" type="Script" id=3]
 [ext_resource path="res://assets/targeter.png" type="Texture" id=4]
 [ext_resource path="res://LevelScene.gd" type="Script" id=5]
+[ext_resource path="res://BackgroundFlash.gd" type="Script" id=6]
 [ext_resource path="res://assets/star.png" type="Texture" id=7]
 [ext_resource path="res://assets/tutorial_arrows/DownArrow.tres" type="Texture" id=8]
 [ext_resource path="res://assets/tutorial_arrows/LeftArrow.tres" type="Texture" id=9]
 [ext_resource path="res://assets/tutorial_arrows/RightArrow.tres" type="Texture" id=10]
+[ext_resource path="res://assets/background_darker.png" type="Texture" id=11]
+[ext_resource path="res://rippleshader.tres" type="Material" id=12]
 [ext_resource path="res://Shade.gd" type="Script" id=36]
 [ext_resource path="res://assets/checkerboard.png" type="Texture" id=37]
 [ext_resource path="res://StarSprite.gd" type="Script" id=38]
@@ -17,6 +20,20 @@
 
 [node name="LevelScene" type="Node2D"]
 script = ExtResource( 5 )
+
+[node name="BackgroundDarker" type="Sprite" parent="."]
+texture = ExtResource( 11 )
+centered = false
+offset = Vector2( -16, -16 )
+
+[node name="ColorRect" type="ColorRect" parent="BackgroundDarker"]
+material = ExtResource( 12 )
+margin_right = 512.0
+margin_bottom = 300.0
+color = Color( 1, 1, 1, 0 )
+
+[node name="BackgroundFlash" type="Node2D" parent="."]
+script = ExtResource( 6 )
 
 [node name="Checkerboard" type="TextureRect" parent="."]
 visible = false
