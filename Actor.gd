@@ -31,6 +31,7 @@ var facing_left = false;
 # animated sprites logic
 var frame_timer = 0;
 var frame_timer_max = 0.1;
+var bob_timer = 0;
 var post_mortem = -1;
 # ding
 var ding = null;
@@ -154,6 +155,10 @@ func phases_into_actors() -> bool:
 	return false;
 
 func _process(delta: float) -> void:
+	if (is_character):
+		bob_timer += delta;
+		offset.y = sin(bob_timer) + 9;
+	
 	#action lines
 	if (airborne != -1):
 		var fall = gamelogic.falling_direction(self);
