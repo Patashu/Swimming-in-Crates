@@ -335,13 +335,6 @@ func _process(delta: float) -> void:
 			animation_timer_max = 0.13; #0.083;
 			position -= current_animation[1]*(animation_timer/animation_timer_max)*16;
 			animation_timer += delta;
-			if (animation_timer >= animation_timer_max / 2 and (animation_timer - delta) < animation_timer_max / 2):
-				if current_animation[2] == 1:
-					in_water_animation = true;
-					gamelogic.play_sound("waterenter");
-				elif current_animation[2] == -1:
-					in_water_animation = false;
-					gamelogic.play_sound("waterexit");
 			
 			if (animation_timer > animation_timer_max):
 				position += current_animation[1]*1*16;
@@ -350,6 +343,27 @@ func _process(delta: float) -> void:
 			else:
 				is_done = false;
 				position += current_animation[1]*(animation_timer/animation_timer_max)*16;
+			
+			if (animation_timer >= animation_timer_max / 2 and (animation_timer - delta) < animation_timer_max / 2):
+				if current_animation[2] == 1:
+					in_water_animation = true;
+					gamelogic.play_sound("waterenter");
+				elif current_animation[2] == -1:
+					in_water_animation = false;
+					gamelogic.play_sound("waterexit");
+				
+				if (current_animation[2] != 0):
+					var overactorsparticles = self.get_parent().get_parent().get_node("OverActorsParticles");
+					for i in range(10):
+						var sprite = Sprite.new();
+						sprite.set_script(preload("res://FadingSprite.gd"));
+						sprite.texture = preload("res://assets/bubble.png")
+						sprite.position = position + Vector2(gamelogic.cell_size/2, gamelogic.cell_size/2);
+						sprite.centered = true;
+						sprite.fadeout_timer_max = 0.5;
+						sprite.velocity = Vector2(gamelogic.rng.randf_range(-24, 24), gamelogic.rng.randf_range(-24, 24));
+						overactorsparticles.add_child(sprite);	
+			
 		elif (current_animation[0] == 1): #bump
 			in_move = true;
 			animation_timer_max = 0.1;
