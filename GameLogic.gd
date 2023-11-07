@@ -1455,6 +1455,7 @@ func finish_animations(chrono: int) -> void:
 	
 	if (chrono >= Chrono.UNDO):
 		for actor in actors:
+			actor.dolphin_flip_frame_max = -1;
 			actor.animation_timer = 0;
 			actor.animations.clear();
 	else:
@@ -1464,6 +1465,7 @@ func finish_animations(chrono: int) -> void:
 			update_animation_server(true);
 			for actor in actors:
 				while (actor.animations.size() > 0):
+					actor.dolphin_flip_frame_max = -1;
 					actor.animation_timer = 99;
 					actor._process(0);
 				actor.animation_timer = 0;

@@ -163,7 +163,7 @@ func set_next_texture(tex: Texture, facing_left_at_the_time: bool, facing_vertic
 			dolphin_sprite.hframes = 3;
 			dolphin_sprite.frame = 0;
 			frame_timer = 0;
-			frame_timer_max = 0.1;
+			frame_timer_max = 0.08;
 		else:
 			dolphin_flip_frame_max = dolphin_flip_frame_max_old;
 	
@@ -321,12 +321,12 @@ func _process(delta: float) -> void:
 	
 	# animation system stuff
 	in_move = false;
-	if (animations.size() > 0):
+	if (animations.size() > 0 and gamelogic.player.dolphin_flip_frame_max == -1):
 		var current_animation = animations[0];
 		var is_done = true;
 		if (current_animation[0] == 0): #move
 			in_move = true;
-			animation_timer_max = 0.083;
+			animation_timer_max = 0.13; #0.083;
 			position -= current_animation[1]*(animation_timer/animation_timer_max)*16;
 			animation_timer += delta;
 			if (animation_timer > animation_timer_max):
