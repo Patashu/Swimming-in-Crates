@@ -140,6 +140,7 @@ var map_y_max : int = 0;
 var map_x_max_max : int = 31; # can change these if I want to adjust hori/vertical scrolling
 var map_y_max_max : int = 15;
 var terrain_layers = []
+var voidlike_puzzle = false;
 
 # information about the actors and their state
 var player : Actor = null
@@ -697,6 +698,7 @@ func get_used_cells_by_id_one_array(id: int) -> Array:
 	return results;
 
 func make_actors() -> void:
+	voidlike_puzzle = false;
 	#do this all before players/crates:
 	
 	#hatches
@@ -1393,7 +1395,10 @@ func append_replay(move: String) -> void:
 	user_replay += move;
 	
 func undo_replay() -> bool:
-	user_replay = user_replay.left(user_replay.length() - 1);
+	if (voidlike_puzzle):
+		user_replay += "z";
+	else:
+		user_replay = user_replay.left(user_replay.length() - 1);
 	return true;
 
 func clone_actor_but_dont_add_it(actor : Actor) -> Actor:
@@ -2104,7 +2109,9 @@ func replay_advance_turn(amount: int) -> void:
 		# 2) it's a long jump, and going forward from the start would be quicker
 		# (currently assuming an undo is 2.1x as fast as a forward move, which seems roughly right)
 		var restart_and_advance = false;
-		if amount < -50 and target_turn*2.1 < -amount:
+		if (voidlike_puzzle):
+			restart_and_advance = true;
+		elif amount < -50 and target_turn*2.1 < -amount:
 			restart_and_advance = true;
 			
 		if (restart_and_advance):
@@ -2278,6 +2285,8 @@ func start_specific_replay(replay: String) -> void:
 	end_replay();
 	toggle_replay();
 	level_replay = replay;
+	if (level_replay.find("z") >= 0):
+		voidlike_puzzle = true;
 	update_info_labels();
 
 func replay_from_clipboard() -> void:
