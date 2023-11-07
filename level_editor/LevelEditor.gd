@@ -146,7 +146,7 @@ func serialize_current_level() -> String:
 
 	var result = "SwimmingInCratesPuzzleStart: " + level_info.level_name + " by " + level_info.level_author + "\n";
 	var level_metadata = {};
-	var metadatas = ["level_name", "level_author", "level_replay", "map_x_max", "map_y_max", #"target_sky"
+	var metadatas = ["level_name", "level_author", "level_replay", "map_x_max", "map_y_max", "wiring"
 	];
 	for metadata in metadatas:
 		level_metadata[metadata] = level_info.get(metadata);

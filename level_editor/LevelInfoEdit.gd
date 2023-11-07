@@ -8,6 +8,7 @@ onready var okbutton : Button = get_node("Holder/OkButton");
 onready var levelname : TextEdit = get_node("Holder/LevelName");
 onready var levelauthor : TextEdit = get_node("Holder/LevelAuthor");
 onready var levelreplay : TextEdit = get_node("Holder/LevelReplay");
+onready var wiring : TextEdit = get_node("Holder/Wiring");
 
 func _ready() -> void:
 	okbutton.connect("pressed", self, "destroy");
@@ -18,6 +19,7 @@ func _ready() -> void:
 	levelname.text = parent.level_info.level_name;
 	levelauthor.text = parent.level_info.level_author;
 	levelreplay.text = parent.level_info.level_replay;
+	wiring.text = parent.level_info.wiring;
 
 func destroy() -> void:
 	var parent = get_parent();
@@ -25,6 +27,7 @@ func destroy() -> void:
 	parent.level_info.level_name = levelname.text;
 	parent.level_info.level_author = levelauthor.text;
 	parent.level_info.level_replay = levelreplay.text;
+	parent.level_info.wiring = wiring.text;
 	
 	self.queue_free();
 	gamelogic.ui_stack.erase(self);

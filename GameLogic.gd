@@ -783,9 +783,10 @@ func setup_wiring() -> void:
 		i += 1;
 	hatches = actors.duplicate();
 	hatches.sort_custom(self, "reading_order_actor");
-	wires = [];
-	for j in range(buttons.size()):
-		wires.append([j, j]);
+	if (wires.size() == 0):
+		wires = [];
+		for j in range(buttons.size()):
+			wires.append([j, j]);
 	
 func reading_order_vector(a, b) -> bool:
 	if a.y != b.y:
@@ -2359,6 +2360,12 @@ func serialize_current_level() -> String:
 	var metadatas = ["level_name", "level_author",  "map_x_max", "map_y_max"];
 	for metadata in metadatas:
 		level_metadata[metadata] = self.get(metadata);
+	var wiring = "";
+	for wire in wires:
+		if (wiring.length() > 0):
+			wiring += ",";
+		wiring += str(wire[0]) + "->" + str(wire[1]);
+	level_metadata["wiring"] = wiring;
 	
 	# we now have to grab the original values for: terrain_layers, heavy_max_moves, light_max_moves
 	# has to be kept in sync with load_level/ready_map and any custom level logic we end up adding
@@ -2433,7 +2440,7 @@ func deserialize_custom_level(custom: String) -> Node:
 		return null;
 	
 	var metadatas = ["level_name", "level_author", "level_replay", "map_x_max", "map_y_max",
-	"layers"];
+	"layers", "wiring"];
 	
 	for metadata in metadatas:
 		if (!result.has(metadata)):
@@ -2486,6 +2493,12 @@ func load_custom_level(custom: String) -> void:
 	level_name = level_info["level_name"];
 	level_author = level_info["level_author"];
 	level_replay = level_info["level_replay"];
+	wires = [];
+	var wiring = level_info["wiring"];
+	var wiring_split = wiring.split(",");
+	for wire in wiring_split:
+		var wire_parts = wire.split("->");
+		wires.append([int(wire_parts[0]), int(wire_parts[1])]);
 	map_x_max = int(level_info["map_x_max"]);
 	map_y_max = int(level_info["map_y_max"]);
 	

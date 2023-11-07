@@ -13,6 +13,7 @@ tile_data = PoolIntArray( 0, 0, 524290, 1, 0, 196614, 2, 0, 196614, 3, 0, 196614
 script = ExtResource( 1 )
 level_name = "Swimming in Crates"
 level_replay = "Swimming in Crates$mturn=67$adwdwdddawddswadwaasdwdwddsdwddsawaaswdawddsdawaadwddswadwaadwdwdwd"
+wiring = "0->0,1->1"
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = ExtResource( 2 )

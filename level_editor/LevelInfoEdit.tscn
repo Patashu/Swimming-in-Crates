@@ -26,10 +26,10 @@ margin_bottom = 278.0
 text = "Ok"
 
 [node name="Label4" type="Label" parent="Holder"]
-margin_left = 151.0
-margin_top = 30.0
-margin_right = 213.0
-margin_bottom = 41.0
+margin_left = 149.0
+margin_top = 26.0
+margin_right = 211.0
+margin_bottom = 37.0
 text = "Level Name"
 
 [node name="Label5" type="Label" parent="Holder"]
@@ -41,10 +41,17 @@ text = "Level Author"
 
 [node name="Label6" type="Label" parent="Holder"]
 margin_left = 150.0
-margin_top = 102.0
+margin_top = 103.0
 margin_right = 213.0
-margin_bottom = 113.0
+margin_bottom = 114.0
 text = "Level Replay"
+
+[node name="Label7" type="Label" parent="Holder"]
+margin_left = 149.0
+margin_top = 143.0
+margin_right = 212.0
+margin_bottom = 154.0
+text = "Wiring"
 
 [node name="LevelName" type="TextEdit" parent="Holder"]
 margin_left = 8.0
@@ -63,5 +70,11 @@ margin_left = 7.0
 margin_top = 90.0
 margin_right = 144.0
 margin_bottom = 127.0
+
+[node name="Wiring" type="TextEdit" parent="Holder"]
+margin_left = 7.0
+margin_top = 130.0
+margin_right = 144.0
+margin_bottom = 167.0
 
 [node name="Pointer" type="Sprite" parent="Holder"]
