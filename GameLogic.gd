@@ -1072,7 +1072,8 @@ pushers_list: Array = [], is_move: bool = false, success: int = Success.No) -> i
 				else:
 					add_to_animation_server(actor, [Animation.sfx, "involuntarybumpother"]);
 		# bump animation always happens, I think?
-		add_to_animation_server(actor, [Animation.bump, dir]);
+		if (!is_gravity):
+			add_to_animation_server(actor, [Animation.bump, dir]);
 	return success;
 	
 func adjust_turn(amount: int) -> void:
@@ -1295,8 +1296,24 @@ pushers_list: Array = []) -> int:
 		# Multi Push Rule: Multipushes are allowed (even multiple things in a tile and etc) unless another rule prohibits it.
 		var strength_modifier = 0;
 		pushers_list.append(actor);
-		for actor_there in pushables_there:			
+		for actor_there in pushables_there:
 			# Strength Rule
+			# with a twist for Swimming in Crates - buoyant crates can stack up and outnumber weaker opposition.
+			if (is_gravity and !actor_there.is_character and !pushers_list[0].is_character):
+				strength_modifier = 0;
+				var push_fall = falling_direction(pushers_list[0]).y;
+				for pusher in pushers_list:
+					if !pusher.is_character:
+						var pusher_fall = falling_direction(pusher).y;
+						if push_fall == pusher_fall:
+							strength_modifier += 1;
+						elif push_fall * -1 == pusher_fall:
+							strength_modifier -= 1;
+				var dest_fall = falling_direction(actor_there).y;
+				if push_fall == dest_fall:
+					strength_modifier += 1;
+				elif push_fall * -1 == dest_fall:
+					strength_modifier -= 1;
 			if !strength_check(actor.strength + strength_modifier, actor_there.heaviness):
 				if (actor.phases_into_actors()):
 					pushables_there.clear();
