@@ -398,6 +398,10 @@ func _process(delta: float) -> void:
 				self.modulate.a = 1-(animation_timer/animation_timer_max);
 		elif (current_animation[0] == 5): #open
 			open_animate = current_animation[1];
+			if (open_animate):
+				gamelogic.play_sound("unlock");
+			else:
+				gamelogic.play_sound("dig");
 		elif (current_animation[0] == 6): #swap
 			var dir = current_animation[1];
 			gamelogic.play_sound("swap");
