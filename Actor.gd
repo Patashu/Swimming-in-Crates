@@ -57,6 +57,7 @@ var action_lines_timer_max = 0.25;
 enum Name {
 	Dolphin,
 	Hatch,
+	AutoGrate,
 	CrateFloat,
 	CrateFloatNoPush,
 	CrateFloatNoSwap,

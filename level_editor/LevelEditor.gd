@@ -22,6 +22,8 @@ enum Tiles {
 	CrateSinkNoSwap,
 	CrateSinkNothing,
 	Water,
+	NoDolphin,
+	AutoGrate,
 }
 
 onready var gamelogic = get_node("/root/LevelScene").gamelogic;
@@ -70,8 +72,8 @@ func initialize_picker_array() -> void:
 		picker_array.append(tile);
 
 	for i in range(picker_array.size()):
-		var x = i % 21;
-		var y = i / 21;
+		var x = i % 20;
+		var y = i / 20;
 		picker.set_cellv(Vector2(x, y), picker_array[i]);
 	picker.update_bitmask_region();
 

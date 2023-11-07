@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tutorial_arrow_new.png-3113cab06a6c794eab955090a404e77c.stex"
+path="res://.import/nodolphin_3.png-5eb6a38f29d1adefc46c644fef276987.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tutorial_arrow_new.png"
-dest_files=[ "res://.import/tutorial_arrow_new.png-3113cab06a6c794eab955090a404e77c.stex" ]
+source_file="res://assets/nodolphin_3.png"
+dest_files=[ "res://.import/nodolphin_3.png-5eb6a38f29d1adefc46c644fef276987.stex" ]
 
 [params]
 

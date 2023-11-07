@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=21 format=2]
+[gd_resource type="TileSet" load_steps=26 format=2]
 
 [ext_resource path="res://assets/dolphin_idle.png" type="Texture" id=1]
 [ext_resource path="res://assets/switch.png" type="Texture" id=2]
@@ -20,6 +20,21 @@
 [ext_resource path="res://assets/crateneutralnothing.png" type="Texture" id=18]
 [ext_resource path="res://assets/water.png" type="Texture" id=19]
 [ext_resource path="res://DefaultTiles.gd" type="Script" id=20]
+[ext_resource path="res://assets/nodolphin_2.png" type="Texture" id=21]
+[ext_resource path="res://assets/nodolphin_1.png" type="Texture" id=22]
+[ext_resource path="res://assets/nodolphin_3.png" type="Texture" id=23]
+[ext_resource path="res://assets/autograte.png" type="Texture" id=24]
+
+[sub_resource type="AnimatedTexture" id=1]
+frames = 4
+fps = 2.0
+frame_0/texture = ExtResource( 22 )
+frame_1/texture = ExtResource( 21 )
+frame_1/delay_sec = 0.0
+frame_2/texture = ExtResource( 23 )
+frame_2/delay_sec = 0.0
+frame_3/texture = ExtResource( 21 )
+frame_3/delay_sec = 0.0
 
 [resource]
 0/name = "Wall"
@@ -37,8 +52,8 @@
 0/autotile/navpoly_map = [  ]
 0/autotile/priority_map = [  ]
 0/autotile/z_index_map = [  ]
-0/occluder_offset = Vector2( 0, 0 )
-0/navigation_offset = Vector2( 0, 0 )
+0/occluder_offset = Vector2( 72, 120 )
+0/navigation_offset = Vector2( 72, 120 )
 0/shape_offset = Vector2( 0, 0 )
 0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
 0/shape_one_way = false
@@ -298,12 +313,40 @@
 18/autotile/navpoly_map = [  ]
 18/autotile/priority_map = [  ]
 18/autotile/z_index_map = [  ]
-18/occluder_offset = Vector2( 0, 0 )
-18/navigation_offset = Vector2( 0, 0 )
+18/occluder_offset = Vector2( 72, 120 )
+18/navigation_offset = Vector2( 72, 120 )
 18/shape_offset = Vector2( 0, 0 )
 18/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
 18/shape_one_way = false
 18/shape_one_way_margin = 0.0
 18/shapes = [  ]
 18/z_index = 0
+19/name = "NoDolphin"
+19/texture = SubResource( 1 )
+19/tex_offset = Vector2( 0, 0 )
+19/modulate = Color( 1, 1, 1, 1 )
+19/region = Rect2( 0, 0, 16, 16 )
+19/tile_mode = 0
+19/occluder_offset = Vector2( 8, 8 )
+19/navigation_offset = Vector2( 8, 8 )
+19/shape_offset = Vector2( 0, 0 )
+19/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+19/shape_one_way = false
+19/shape_one_way_margin = 0.0
+19/shapes = [  ]
+19/z_index = 0
+20/name = "AutoGrate"
+20/texture = ExtResource( 24 )
+20/tex_offset = Vector2( 0, 0 )
+20/modulate = Color( 1, 1, 1, 1 )
+20/region = Rect2( 0, 0, 16, 16 )
+20/tile_mode = 0
+20/occluder_offset = Vector2( 8, 8 )
+20/navigation_offset = Vector2( 8, 8 )
+20/shape_offset = Vector2( 0, 0 )
+20/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+20/shape_one_way = false
+20/shape_one_way_margin = 0.0
+20/shapes = [  ]
+20/z_index = 0
 script = ExtResource( 20 )

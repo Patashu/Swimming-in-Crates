@@ -119,6 +119,8 @@ enum Tiles {
 	CrateSinkNoSwap,
 	CrateSinkNothing,
 	Water,
+	NoDolphin,
+	AutoGrate,
 }
 
 # information about the level
@@ -689,7 +691,7 @@ func ready_tutorial() -> void:
 	metainfolabel.visible = true;
 	tutoriallabel.visible = false;
 	if (actorsfolder.scale == Vector2(2.0, 2.0)):
-		pass
+		downarrow.visible = false;
 	else:
 		downarrow.visible = true;
 		downarrow.position = player.position + actorsfolder.position - Vector2(0, cell_size);
@@ -1248,6 +1250,22 @@ chrono: int) -> int:
 		match id:
 			Tiles.Wall:
 				result = Success.No;
+			Tiles.NoDolphin:
+				if actor.is_character:
+					result = Success.No;
+					var sprite = Sprite.new();
+					sprite.script = preload("res://PingPongSprite.gd");
+					sprite.hframes = 5;
+					sprite.texture = preload("res://assets/nodolphin_barrier.png");
+					sprite.position = pos*cell_size + Vector2(cell_size/2, cell_size/2);
+					sprite.frame_timer_max = 0.05;
+					if (dir == Vector2.LEFT):
+						sprite.rotation_degrees = -90;
+					elif (dir == Vector2.RIGHT):
+						sprite.rotation_degrees = 90;
+					elif (dir == Vector2.DOWN):
+						sprite.rotation_degrees = 180;
+					overactorsparticles.add_child(sprite);
 		if result != Success.Yes:
 			return result;
 	return result;
