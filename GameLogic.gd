@@ -688,7 +688,11 @@ func ready_map() -> void:
 func ready_tutorial() -> void:
 	metainfolabel.visible = true;
 	tutoriallabel.visible = false;
-	downarrow.visible = false;
+	if (actorsfolder.scale == Vector2(2.0, 2.0)):
+		pass
+	else:
+		downarrow.visible = true;
+		downarrow.position = player.position + actorsfolder.position - Vector2(0, cell_size);
 	leftarrow.visible = false;
 	rightarrow.visible = false;
 	return;
@@ -1079,6 +1083,7 @@ pushers_list: Array = [], is_move: bool = false, success: int = Success.No) -> i
 	return success;
 	
 func adjust_turn(amount: int) -> void:
+	downarrow.visible = false;
 	turn += amount;
 	check_won();
 		
