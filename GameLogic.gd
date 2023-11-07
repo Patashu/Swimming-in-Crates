@@ -154,6 +154,7 @@ var buttons = []
 var reverse_buttons = {};
 var hatches = []
 var wires = []
+var autogrates = []
 
 # save file, ooo!
 var save_file = {}
@@ -722,6 +723,14 @@ func make_actors() -> void:
 	#setup wiring
 	setup_wiring();
 	
+	#auto-grates
+	autogrates = [];
+	extract_actors(Tiles.AutoGrate, Actor.Name.AutoGrate,
+	Heaviness.SUPERHEAVY, Strength.WOODEN, Durability.NOTHING, 0, false, Color(0.5, 0.5, 0.5, 1), 0, true);
+	for actor in actors:
+		if actor.actorname == Actor.Name.AutoGrate:
+			autogrates.append(actor);
+	
 	# find the player
 	# as a you-fucked-up backup, put them in 0,0 if there seems to be none
 	var layers_tiles = get_used_cells_by_id_all_layers(Tiles.Dolphin);
@@ -1023,6 +1032,11 @@ pushers_list: Array = [], is_move: bool = false, success: int = Success.No) -> i
 	return move_actor_to(actor, actor.pos + dir, chrono, hypothetical,
 	is_gravity, pushers_list, is_move, success);
 	
+func adjacent_or_overlapping(a: Vector2, b: Vector2) -> bool:
+	var x_distance = abs(a.x - b.x);
+	var y_distance = abs(a.y - b.y);
+	return (x_distance <= 1 and y_distance == 0) or (x_distance == 0 and y_distance <= 1);
+	
 func move_actor_to(actor: Actor, pos: Vector2, chrono: int, hypothetical: bool, is_gravity: bool,
 pushers_list: Array = [], is_move: bool = false, success: int = Success.No) -> int:
 	var dir = pos - actor.pos;
@@ -1044,7 +1058,14 @@ pushers_list: Array = [], is_move: bool = false, success: int = Success.No) -> i
 				
 		if (actor.is_character):
 			add_to_animation_server(actor, [Animation.set_next_texture, actor.get_next_texture(), actor.facing_left, actor.facing_vertical, actor.gem_status()]);
-				
+		
+		if (actor.is_character):
+			for autograte in autogrates:
+				if (adjacent_or_overlapping(autograte.pos, old_pos) and !adjacent_or_overlapping(autograte.pos, actor.pos)):
+					set_actor_var(autograte, "open", false, chrono);
+				elif (!adjacent_or_overlapping(autograte.pos, old_pos) and adjacent_or_overlapping(autograte.pos, actor.pos)):
+					set_actor_var(autograte, "open", true, chrono);
+		
 		if actor.has_gem:
 			if actor.pressing:
 				change_pressed(actor, false, old_pos, chrono);

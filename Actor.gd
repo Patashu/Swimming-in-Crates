@@ -86,6 +86,9 @@ func get_next_texture() -> Resource:
 	elif actorname == Name.Hatch:
 		hframes = 7;
 		return preload("res://assets/hatch_spritesheet.png");
+	elif actorname == Name.AutoGrate:
+		hframes = 8;
+		return preload("res://assets/autograte_spritesheet.png");
 	elif texture != null:
 		return texture;
 	else:
@@ -302,7 +305,7 @@ func _process(delta: float) -> void:
 						dolphin_sprite.frame += 1;
 	elif hframes <= 1:
 		pass
-	elif actorname == Name.Hatch:
+	elif actorname == Name.Hatch or actorname == Name.AutoGrate:
 		frame_timer += delta;
 		if (frame_timer > frame_timer_max):
 			frame_timer -= frame_timer_max;
