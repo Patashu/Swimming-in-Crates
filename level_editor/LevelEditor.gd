@@ -277,7 +277,7 @@ func change_pen_tile() -> void:
 		pen.offset = Vector2(-1, -1);
 	# handle auto-tile icons
 	pen.region_enabled = false;
-	if (pen_tile == Tiles.Water):
+	if (pen_tile == Tiles.Water or pen_tile == Tiles.Wall):
 		var coord = tile_set.autotile_get_icon_coordinate(pen_tile);
 		pen.region_enabled = true;
 		pen.region_rect = Rect2(coord*gamelogic.cell_size, Vector2(gamelogic.cell_size, gamelogic.cell_size));
