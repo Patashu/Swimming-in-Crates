@@ -666,6 +666,11 @@ func ready_map() -> void:
 		if ("$" in level_replay):
 			var level_replay_parts = level_replay.split("$");
 			level_replay = level_replay_parts[level_replay_parts.size()-1];
+		var wiring = level_info.wiring;
+		var wiring_split = wiring.split(",");
+		for wire in wiring_split:
+			var wire_parts = wire.split("->");
+			wires.append([int(wire_parts[0]), int(wire_parts[1])]);
 	
 	calculate_map_size();
 	make_actors();
@@ -1435,8 +1440,8 @@ func finish_animations(chrono: int) -> void:
 	undo_effect_color = Color.transparent;
 	
 	if (chrono >= Chrono.UNDO):
+		player.dolphin_flip_frame_max = -1;
 		for actor in actors:
-			actor.dolphin_flip_frame_max = -1;
 			actor.animation_timer = 0;
 			actor.animations.clear();
 	else:
@@ -1446,7 +1451,7 @@ func finish_animations(chrono: int) -> void:
 			update_animation_server(true);
 			for actor in actors:
 				while (actor.animations.size() > 0):
-					actor.dolphin_flip_frame_max = -1;
+					player.dolphin_flip_frame_max = -1;
 					actor.animation_timer = 99;
 					actor._process(0);
 				actor.animation_timer = 0;
