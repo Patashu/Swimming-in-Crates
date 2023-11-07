@@ -1101,7 +1101,7 @@ pushers_list: Array = [], is_move: bool = false, success: int = Success.No) -> i
 				else:
 					add_to_animation_server(actor, [Animation.sfx, "involuntarybumpother"]);
 		# bump animation always happens, I think?
-		if (!is_gravity):
+		if (!is_gravity or actor.is_character):
 			add_to_animation_server(actor, [Animation.bump, dir]);
 	return success;
 	
