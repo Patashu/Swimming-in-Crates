@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/winsic.ogg-93d12be0a3485997823b473c440f98e3.oggstr"
+
+[deps]
+
+source_file="res://sfx/winsic.ogg"
+dest_files=[ "res://.import/winsic.ogg-93d12be0a3485997823b473c440f98e3.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

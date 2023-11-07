@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/dolphincoyote.ogg-131701b0ec8d4ad43415f07bc3d199f4.oggstr"
+
+[deps]
+
+source_file="res://sfx/dolphincoyote.ogg"
+dest_files=[ "res://.import/dolphincoyote.ogg-131701b0ec8d4ad43415f07bc3d199f4.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0
