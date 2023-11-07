@@ -33,7 +33,6 @@ var replayturnsliderset = false;
 var replayspeedsliderset = false;
 
 # distinguish between temporal layers when a move or state change happens
-# ghosts is for undo trail ghosts
 enum Chrono {
 	MOVE
 	UNDO

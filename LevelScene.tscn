@@ -56,8 +56,6 @@ tile_data = PoolIntArray( 327687, 1, 0, 393222, 0, 0, 393223, 0, 0, 393224, 18, 
 
 [node name="ActorsFolder" type="Node2D" parent="."]
 
-[node name="GhostsFolder" type="Node2D" parent="."]
-
 [node name="OverActorsParticles" type="Node2D" parent="."]
 
 [node name="Targeter" type="Sprite" parent="."]
