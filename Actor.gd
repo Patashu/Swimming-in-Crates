@@ -368,6 +368,19 @@ func _process(delta: float) -> void:
 				self.modulate.a = 1-(animation_timer/animation_timer_max);
 		elif (current_animation[0] == 5): #open
 			open_animate = current_animation[1];
+		elif (current_animation[0] == 6): #swap
+			var dir = current_animation[1];
+			gamelogic.play_sound("swap");
+			var overactorsparticles = self.get_parent().get_parent().get_node("OverActorsParticles");
+			for i in range(2):
+				var sprite = Sprite.new();
+				sprite.set_script(preload("res://OneTimeSprite.gd"));
+				sprite.texture = preload("res://assets/swap_overlay.png")
+				sprite.position = self.position + current_animation[1]*i*gamelogic.cell_size;
+				sprite.centered = false;
+				sprite.hframes = 5;
+				sprite.frame_max = 5;
+				overactorsparticles.add_child(sprite);
 		if (is_done):
 			animations.pop_front();
 			animation_timer = 0;

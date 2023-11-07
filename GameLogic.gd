@@ -94,6 +94,7 @@ enum Animation {
 	sfx, #3
 	fade, #4
 	open, #5
+	swap, #6
 }
 
 # attempted performance optimization - have an enum of all tile ids and assert at startup that they're right
@@ -1292,6 +1293,7 @@ pushers_list: Array = []) -> int:
 					# When making a non-gravity move, if the push fails, Dolphin can swap with a swappable crate.
 					# since swappable crate did a bump, Dolphin needs to do a bump too to sync up animations
 					add_to_animation_server(actor, [Animation.bump, dir, -1]);
+					add_to_animation_server(actor, [Animation.swap, dir]);
 					move_actor_relative(actor_there, -dir, chrono, false, is_gravity, [], false, Success.Yes);
 					pushables_there.erase(actor_there);
 				else:
