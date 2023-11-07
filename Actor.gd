@@ -357,7 +357,7 @@ func _process(delta: float) -> void:
 					for i in range(10):
 						var sprite = Sprite.new();
 						sprite.set_script(preload("res://FadingSprite.gd"));
-						sprite.texture = preload("res://assets/bubble.png")
+						sprite.texture = preload("res://assets/bubblesmall.png")
 						sprite.position = position + Vector2(gamelogic.cell_size/2, gamelogic.cell_size/2);
 						sprite.centered = true;
 						sprite.fadeout_timer_max = 0.5;

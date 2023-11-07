@@ -190,6 +190,8 @@ var arbitrary_color = Color("#E6E6EC");
 var ui_stack = [];
 var ready_done = false;
 var using_controller = false;
+var bubble_timer = 0;
+var bubble_timer_max = 0;
 
 #UI defaults
 var win_label_default_y = 113;
@@ -2517,6 +2519,22 @@ func adjust_next_replay_time(old_replay_interval: float) -> void:
 var last_dir_release_times = [0, 0, 0, 0];
 	
 func _process(delta: float) -> void:
+	bubble_timer += delta;
+	var water_tiles = get_used_cells_by_id_one_array(Tiles.Water);
+	bubble_timer_max = 5.0/water_tiles.size();
+	if (bubble_timer >= bubble_timer_max):
+		bubble_timer -= bubble_timer_max;
+		var random_water_tile = water_tiles[rng.randi_range(0, water_tiles.size() - 1)];
+		var sprite = Sprite.new();
+		sprite.set_script(preload("res://FadingSprite.gd"));
+		sprite.texture = preload("res://assets/bubblesmall.png")
+		sprite.position = random_water_tile*cell_size + Vector2(rng.randf_range(0, cell_size), 0);
+		sprite.centered = true;
+		sprite.fadeout_timer_max = 1.0;
+		sprite.velocity = Vector2(rng.randf_range(-2, 2), rng.randf_range(-2, -16));
+		sprite.position.y -= sprite.velocity.y;
+		overactorsparticles.add_child(sprite);	
+	
 	if (Input.is_action_just_pressed("any_controller") or Input.is_action_just_pressed("any_controller_2")) and !using_controller:
 		using_controller = true;
 		menubutton.text = "Menu (Start)";
