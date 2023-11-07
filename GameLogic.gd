@@ -874,59 +874,32 @@ func prepare_audio() -> void:
 	# TODO: I could automate this if I can iterate the folder
 	# TODO: replace this with an enum and assert on startup like tiles
 
-	sounds["abysschime"] = preload("res://sfx/abysschime.ogg");
-	sounds["bluefire"] = preload("res://sfx/bluefire.ogg");
-	sounds["broken"] = preload("res://sfx/broken.ogg");
 	sounds["bump"] = preload("res://sfx/bump.ogg");
+	sounds["dig"] = preload("res://sfx/dig.ogg");
+	sounds["dolphincoyote"] = preload("res://sfx/dolphincoyote.ogg");
+	sounds["dolphinland"] = preload("res://sfx/dolphinland.ogg");
 	sounds["fall"] = preload("res://sfx/fall.ogg");
-	sounds["fuzz"] = preload("res://sfx/fuzz.ogg");
-	sounds["greenfire"] = preload("res://sfx/greenfire.ogg");
-	sounds["greentimecrystal"] = preload("res://sfx/greentimecrystal.ogg");
-	sounds["heavycoyote"] = preload("res://sfx/heavycoyote.ogg");
-	sounds["heavyland"] = preload("res://sfx/heavyland.ogg");
-	sounds["heavystep"] = preload("res://sfx/heavystep.ogg");
-	sounds["heavyuncoyote"] = preload("res://sfx/heavyuncoyote.ogg");
-	sounds["heavyunland"] = preload("res://sfx/heavyunland.ogg");
-	sounds["involuntarybump"] = preload("res://sfx/involuntarybump.ogg");
 	sounds["involuntarybumplight"] = preload("res://sfx/involuntarybumplight.ogg");
 	sounds["involuntarybumpother"] = preload("res://sfx/involuntarybumpother.ogg");
-	sounds["lightcoyote"] = preload("res://sfx/lightcoyote.ogg");
-	sounds["lightland"] = preload("res://sfx/lightland.ogg");
-	sounds["lightstep"] = preload("res://sfx/lightstep.ogg");
-	sounds["lightuncoyote"] = preload("res://sfx/lightuncoyote.ogg");
-	sounds["lightunland"] = preload("res://sfx/lightunland.ogg");
-	sounds["lose"] = preload("res://sfx/lose.ogg");
-	sounds["magentatimecrystal"] = preload("res://sfx/magentatimecrystal.ogg");
 	sounds["metarestart"] = preload("res://sfx/metarestart.ogg");
 	sounds["metaundo"] = preload("res://sfx/metaundo.ogg");
 	sounds["push"] = preload("res://sfx/push.ogg");
-	sounds["redfire"] = preload("res://sfx/redfire.ogg");
-	sounds["remembertimecrystal"] = preload("res://sfx/remembertimecrystal.ogg");
 	sounds["restart"] = preload("res://sfx/restart.ogg");	
-	sounds["shatter"] = preload("res://sfx/shatter.ogg");
-	sounds["shroud"] = preload("res://sfx/shroud.ogg");
 	sounds["step"] = preload("res://sfx/step.ogg");
+	sounds["swap"] = preload("res://sfx/swap.ogg");
 	sounds["switch"] = preload("res://sfx/switch.ogg");
-	sounds["tick"] = preload("res://sfx/tick.ogg");
-	sounds["timesup"] = preload("res://sfx/timesup.ogg");
-	sounds["unbroken"] = preload("res://sfx/unbroken.ogg");
-	sounds["undo"] = preload("res://sfx/undo.ogg");
-	sounds["undostrong"] = preload("res://sfx/undostrong.ogg");
-	sounds["unfall"] = preload("res://sfx/unfall.ogg");
-	sounds["unpush"] = preload("res://sfx/unpush.ogg");
-	sounds["unshatter"] = preload("res://sfx/unshatter.ogg");
-	sounds["untick"] = preload("res://sfx/untick.ogg");
-	sounds["usegreenality"] = preload("res://sfx/usegreenality.ogg");
+	sounds["unlock"] = preload("res://sfx/unlock.ogg");
 	sounds["voidundo"] = preload("res://sfx/voidundo.ogg");
-	sounds["winentwined"] = preload("res://sfx/winentwined.ogg");
-	sounds["winbadtime"] = preload("res://sfx/winbadtime.ogg");
+	sounds["waterenter"] = preload("res://sfx/waterenter.ogg");
+	sounds["waterexit"] = preload("res://sfx/waterexit.ogg");
+	sounds["winsic"] = preload("res://sfx/winsic.ogg");
 
 	for i in range (8):
 		var speaker = AudioStreamPlayer.new();
 		self.add_child(speaker);
 		speakers.append(speaker);
 	lost_speaker = AudioStreamPlayer.new();
-	lost_speaker.stream = sounds["lose"];
+	#lost_speaker.stream = sounds["lose"];
 	lost_speaker_volume_tween = Tween.new();
 	self.add_child(lost_speaker_volume_tween);
 	self.add_child(lost_speaker);
@@ -1500,7 +1473,7 @@ func check_won() -> void:
 				level_info.level_replay = annotate_replay(user_replay);
 				floating_text("Test successful, recorded replay!");
 		if (won == true and !doing_replay):
-			play_won("winentwined");
+			play_won("winsic");
 			var levels_save_data = save_file["levels"];
 			if (!levels_save_data.has(level_name)):
 				levels_save_data[level_name] = {};

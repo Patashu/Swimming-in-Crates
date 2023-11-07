@@ -88,7 +88,7 @@ func _fanfareslider_value_changed(value: float) -> void:
 	
 	gamelogic.save_file["fanfare_volume"] = value;
 	gamelogic.setup_volume();
-	gamelogic.play_won("winentwined");
+	gamelogic.play_won("winsic");
 	updatelabelfanfare(value);
 		
 func _musicslider_value_changed(value: float) -> void:
