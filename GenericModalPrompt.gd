@@ -37,10 +37,10 @@ func _process(delta: float) -> void:
 	pointer.position.y = round(focus.rect_position.y + focus.rect_size.y / 2);
 	if (focus_middle_x > holder.rect_size.x / 2):
 		pointer.texture = preload("res://assets/tutorial_arrows/LeftArrow.tres");
-		pointer.position.x = round(focus.rect_position.x + focus.rect_size.x + 12);
+		pointer.position.x = round(focus.rect_position.x + focus.rect_size.x + pointer.texture.get_width()/2);
 	else:
 		pointer.texture = preload("res://assets/tutorial_arrows/RightArrow.tres");
-		pointer.position.x = round(focus.rect_position.x - 12);
+		pointer.position.x = round(focus.rect_position.x - pointer.texture.get_width()/2);
 
 func _draw() -> void:
 	draw_rect(Rect2(0, 0,
