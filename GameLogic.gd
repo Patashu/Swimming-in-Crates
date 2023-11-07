@@ -1034,7 +1034,14 @@ pushers_list: Array = [], is_move: bool = false, success: int = Success.No) -> i
 		if (was_fall):
 			add_to_animation_server(actor, [Animation.sfx, "fall"]);
 
-		add_to_animation_server(actor, [Animation.move, dir]);
+		var water_state = 0;
+		if (terrain_in_tile(actor.pos).has(Tiles.Water) and (chrono == Chrono.TIMELESS or !terrain_in_tile(old_pos).has(Tiles.Water))):
+			actor.in_water = true;
+			water_state = 1;
+		if (!terrain_in_tile(actor.pos).has(Tiles.Water) and (chrono == Chrono.TIMELESS or terrain_in_tile(old_pos).has(Tiles.Water))):
+			actor.in_water = false;
+			water_state = -1;
+		add_to_animation_server(actor, [Animation.move, dir, water_state]);
 		
 		return success;
 	elif (success != Success.Yes):

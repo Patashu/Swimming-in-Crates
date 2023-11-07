@@ -36,6 +36,8 @@ var dolphin_flip_transition_table = [-1, -1, -1, -1];
 var dolphin_flip_frame_max = -1;
 var flip_h_will_be = false;
 var rotation_degrees_will_be = 0;
+var in_water = false;
+var in_water_animation = false;
 var bob_timer = 0;
 # animated sprites logic
 var frame_timer = 0;
@@ -72,6 +74,7 @@ enum Name {
 func update_graphics() -> void:
 	var tex = get_next_texture();
 	dolphin_flip_transition_table = [-1, -1, -1, -1];
+	in_water_animation = in_water;
 	set_next_texture(tex, facing_left, facing_vertical, gem_status());
 	open_animate = open;
 
@@ -229,7 +232,10 @@ var delays = [0.2, 0.3, 0.4, 0.3, 0.2, 0.15, 0.2, 0.4, 0.3, 0.25, 0.2, 0.15]
 
 func _process(delta: float) -> void:
 	if (is_character):
-		bob_timer += delta;
+		if in_water_animation:
+			bob_timer += delta;
+		else:
+			bob_timer = 0;
 		dolphin_sprite.position.y = 8 + sin(bob_timer);
 	
 	#action lines
@@ -329,6 +335,14 @@ func _process(delta: float) -> void:
 			animation_timer_max = 0.13; #0.083;
 			position -= current_animation[1]*(animation_timer/animation_timer_max)*16;
 			animation_timer += delta;
+			if (animation_timer >= animation_timer_max / 2 and (animation_timer - delta) < animation_timer_max / 2):
+				if current_animation[2] == 1:
+					in_water_animation = true;
+					gamelogic.play_sound("waterenter");
+				elif current_animation[2] == -1:
+					in_water_animation = false;
+					gamelogic.play_sound("waterexit");
+			
 			if (animation_timer > animation_timer_max):
 				position += current_animation[1]*1*16;
 				# no rounding errors here! get rounded sucker!
