@@ -666,6 +666,7 @@ func ready_map() -> void:
 		if ("$" in level_replay):
 			var level_replay_parts = level_replay.split("$");
 			level_replay = level_replay_parts[level_replay_parts.size()-1];
+		wires = [];
 		var wiring = level_info.wiring;
 		var wiring_split = wiring.split(",");
 		for wire in wiring_split:
@@ -795,13 +796,13 @@ func setup_wiring() -> void:
 	
 func reading_order_vector(a, b) -> bool:
 	if a.y != b.y:
-		return a.y > b.y;
-	return a.x > b.x;
+		return a.y < b.y;
+	return a.x < b.x;
 	
 func reading_order_actor(a, b) -> bool:
 	if a.pos.y != b.pos.y:
-		return a.pos.y > b.pos.y;
-	return a.pos.x > b.pos.x;
+		return a.pos.y < b.pos.y;
+	return a.pos.x < b.pos.x;
 	
 func extract_actors(id: int, actorname: int, heaviness: int, strength: int, durability: int, fall_speed: int,
 climbs: bool, color: Color, buoyancy: int, can_swap: bool) -> void:
