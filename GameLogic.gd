@@ -1618,7 +1618,7 @@ func undo(is_silent: bool = false) -> bool:
 	if (!is_silent):
 		cut_sound();
 		play_sound("metaundo");
-	undo_effect_strength = 0.08;
+	undo_effect_strength = 0.02;
 	undo_effect_per_second = undo_effect_strength*(1/0.2);
 	for whatever in underactorsparticles.get_children():
 		whatever.queue_free();
@@ -1632,7 +1632,7 @@ func restart(_is_silent: bool = false) -> void:
 	load_level(0);
 	cut_sound();
 	play_sound("restart");
-	undo_effect_strength = 0.5;
+	undo_effect_strength = 0.1;
 	undo_effect_per_second = undo_effect_strength*(1/0.5);
 	finish_animations(Chrono.TIMELESS);
 	undo_effect_color = arbitrary_color;
