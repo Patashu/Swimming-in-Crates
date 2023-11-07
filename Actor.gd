@@ -354,15 +354,15 @@ func _process(delta: float) -> void:
 				
 				if (current_animation[2] != 0):
 					var overactorsparticles = self.get_parent().get_parent().get_node("OverActorsParticles");
-					for i in range(10):
+					for i in range(20):
 						var sprite = Sprite.new();
 						sprite.set_script(preload("res://FadingSprite.gd"));
 						sprite.texture = preload("res://assets/bubblesmall.png")
 						sprite.position = position + Vector2(gamelogic.cell_size/2, gamelogic.cell_size/2);
-						sprite.position += current_animation[1].rotated(PI/2)*(i-5);
+						sprite.position += current_animation[1].rotated(PI/2)*(i-10)/2.0;
 						sprite.centered = true;
-						sprite.fadeout_timer_max = 0.5;
-						sprite.velocity = 16*current_animation[1].rotated((i-5)/5.0);
+						sprite.fadeout_timer_max = 0.6;
+						sprite.velocity = 16*current_animation[1].rotated((i-10)/7.0);
 						sprite.velocity += Vector2(gamelogic.rng.randf_range(-4, 4), gamelogic.rng.randf_range(-4, 4));
 						overactorsparticles.add_child(sprite);	
 			
