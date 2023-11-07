@@ -280,7 +280,7 @@ func _ready() -> void:
 	# Call once when the game is booted up.
 	menubutton.connect("pressed", self, "escape");
 	levelstar.scale = Vector2(1.0/6.0, 1.0/6.0);
-	winlabel.call_deferred("change_text", "You have won!\n\n[Enter]: Watch Replay\nMade by Patashu (Everything but Art) and Teal Knight (Art)");
+	winlabel.call_deferred("change_text", "You have won!\n\n[Enter]: Watch Replay\nMade by Patashu (Everything Else) and Teal Knight (Art + Level Design Help)");
 	connect_virtual_buttons();
 	prepare_audio();
 	call_deferred("adjust_winlabel");
@@ -1524,13 +1524,13 @@ func check_won() -> void:
 	if (won):
 		won_cooldown = 0;
 		if !using_controller and !doing_replay:
-			winlabel.change_text("You have won!\n\n[Enter]: Watch Replay\nMade by Patashu (Everything but Art) and Teal Knight (Art)")
+			winlabel.change_text("You have won!\n\n[Enter]: Watch Replay\nMade by Patashu (Everything Else) and Teal Knight (Art + Level Design Help)")
 		elif !using_controller and doing_replay:
-			winlabel.change_text("You have won!\n\n[Enter]: Watch Replay\nMade by Patashu (Everything but Art) and Teal Knight (Art)")
+			winlabel.change_text("You have won!\n\n[Enter]: Watch Replay\nMade by Patashu (Everything Else) and Teal Knight (Art + Level Design Help)")
 		elif using_controller and !doing_replay:
-			winlabel.change_text("You have won!\n\n[Bottom Face Button]: Watch Replay\nMade by Patashu (Everything but Art) and Teal Knight (Art)")
+			winlabel.change_text("You have won!\n\n[Bottom Face Button]: Watch Replay\nMade by Patashu (Everything Else) and Teal Knight (Art + Level Design Help)")
 		else:
-			winlabel.change_text("You have won!\n\n[Bottom Face Button]: Watch Replay\nMade by Patashu (Everything but Art) and Teal Knight (Art)")
+			winlabel.change_text("You have won!\n\n[Bottom Face Button]: Watch Replay\nMade by Patashu (Everything Else) and Teal Knight (Art + Level Design Help)")
 		won_fade_started = false;
 		tutoriallabel.visible = false;
 		call_deferred("adjust_winlabel_deferred");
@@ -1995,7 +1995,10 @@ func time_passes(chrono: int) -> void:
 	animation_substep(chrono);
 	
 func bottom_up(a, b) -> bool:
-	# TODO: make this tiebreak by x, then by layer or id, so I can use it as a stable sort in general?
+	var fall_a = falling_direction(a);
+	var fall_b = falling_direction(b);
+	if (fall_a != fall_b):
+		return fall_a > fall_b;
 	return a.pos.y > b.pos.y;
 	
 func replay_interval() -> float:
