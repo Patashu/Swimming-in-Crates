@@ -28,13 +28,18 @@ var color = Color(1, 1, 1, 1);
 var animation_timer = 0;
 var animation_timer_max = 0.05;
 var animations = [];
+# dolphin nonsense
 var facing_left = false;
 var facing_vertical = Vector2.ZERO;
 var in_move = false;
+var dolphin_flip_transition_table = [-1, -1, -1, -1];
+var dolphin_flip_frame_max = -1;
+var flip_h_will_be = false;
+var rotation_degrees_will_be = 0;
+var bob_timer = 0;
 # animated sprites logic
 var frame_timer = 0;
 var frame_timer_max = 0.1;
-var bob_timer = 0;
 var post_mortem = -1;
 # ding
 var ding = null;
@@ -66,6 +71,7 @@ enum Name {
 
 func update_graphics() -> void:
 	var tex = get_next_texture();
+	dolphin_flip_transition_table = [-1, -1, -1, -1];
 	set_next_texture(tex, facing_left, facing_vertical, gem_status());
 	open_animate = open;
 
@@ -93,26 +99,73 @@ func gem_status() -> Texture:
 func set_next_texture(tex: Texture, facing_left_at_the_time: bool, facing_vertical_at_the_time: Vector2, gem_tex: Texture) -> void:
 	if is_instance_valid(gem) and gem_tex != null:
 		gem.texture = gem_tex;
-
+	
 	# facing updates here, even if the texture didn't change
 	if (is_character):
+#		var old_facing_left = dolphin_sprite.flip_h;
+#		var old_facing_vertical = Vector2.ZERO;
+#		if (dolphin_sprite.rotation_degrees == -90 and old_facing_left):
+#			old_facing_vertical = Vector2.DOWN;
+#		elif (dolphin_sprite.rotation_degrees == -90 and !old_facing_left):
+#			old_facing_vertical = Vector2.UP;
+#		if (dolphin_sprite.rotation_degrees == 90 and !old_facing_left):
+#			old_facing_vertical = Vector2.DOWN;
+#		elif (dolphin_sprite.rotation_degrees == 90 and old_facing_left):
+#			old_facing_vertical = Vector2.UP;
+		
+		var dolphin_flip_frame_max_old = dolphin_flip_frame_max;
+		
 		if facing_left_at_the_time:
-			dolphin_sprite.flip_h = true;
+			flip_h_will_be = true;
 		else:
-			dolphin_sprite.flip_h = false;
+			flip_h_will_be = false;
 
 		if (facing_vertical_at_the_time.y == 0):
-			dolphin_sprite.rotation_degrees = 0;
-		elif (facing_vertical_at_the_time.y > 0):
+			rotation_degrees_will_be = 0;
 			if (facing_left_at_the_time):
-				dolphin_sprite.rotation_degrees = -90;
+				#l, d, r, u
+				dolphin_flip_frame_max = dolphin_flip_transition_table[0];
+				dolphin_flip_transition_table = [0, 1, -1, 3];
 			else:
-				dolphin_sprite.rotation_degrees = 90;
-		else: #(facing_vertical_at_the_time.y < 0):
+				#l, d, r, u
+				dolphin_flip_frame_max = dolphin_flip_transition_table[2];
+				dolphin_flip_transition_table = [-1, 1, 0, 3];
+		elif (facing_vertical_at_the_time.y > 0): #down
 			if (facing_left_at_the_time):
-				dolphin_sprite.rotation_degrees = 90;
+				rotation_degrees_will_be = -90;
+				#l, d, r, u
+				dolphin_flip_frame_max = dolphin_flip_transition_table[1];
+				dolphin_flip_transition_table = [3, 0, 2, 2];
 			else:
-				dolphin_sprite.rotation_degrees = -90;
+				rotation_degrees_will_be = 90;
+				#l, d, r, u
+				dolphin_flip_frame_max = dolphin_flip_transition_table[1];
+				dolphin_flip_transition_table = [2, 0, 3, 2];
+		else: #(facing_vertical_at_the_time.y < 0): #up
+			if (facing_left_at_the_time):
+				rotation_degrees_will_be = 90;
+				#l, d, r, u
+				dolphin_flip_frame_max = dolphin_flip_transition_table[3];
+				dolphin_flip_transition_table = [2, 2, 3, 0];
+			else:
+				rotation_degrees_will_be = -90;
+				#l, d, r, u
+				dolphin_flip_frame_max = dolphin_flip_transition_table[3];
+				dolphin_flip_transition_table = [3, 2, 2, 0];
+		
+		if dolphin_flip_frame_max == -1:
+			dolphin_sprite.texture = preload("res://assets/dolphin_animation.png");
+			dolphin_sprite.hframes = 12;
+			dolphin_sprite.flip_h = flip_h_will_be;
+			dolphin_sprite.rotation_degrees = rotation_degrees_will_be;
+		elif dolphin_flip_frame_max >= 1:
+			dolphin_sprite.texture = preload("res://assets/dolphin_flip.png");
+			dolphin_sprite.hframes = 3;
+			dolphin_sprite.frame = 0;
+			frame_timer = 0;
+			frame_timer_max = 0.1;
+		else:
+			dolphin_flip_frame_max = dolphin_flip_frame_max_old;
 	
 	if (self.texture == tex):
 		return;
@@ -209,24 +262,37 @@ func _process(delta: float) -> void:
 	
 	#animated sprites
 	if actorname == Name.Dolphin:
-		if (in_move):
-			frame_timer_max = 0.05;
-		else:
-			frame_timer_max = delays[dolphin_sprite.frame];
-#		elif dolphin_sprite.frame == 2 or dolphin_sprite.frame == 7:
-#			frame_timer_max = 1.0;
-#		else:
-#			frame_timer_max = 0.3;
-		frame_timer += delta;
-		if (frame_timer > frame_timer_max):
-			frame_timer -= frame_timer_max;
-			if (dolphin_sprite.frame == dolphin_sprite.hframes - 1):
-				dolphin_sprite.frame = 0;
-			else:
-				if broken and dolphin_sprite.frame >= 4 and post_mortem != 1:
-					pass
-				elif dolphin_sprite.frame < (dolphin_sprite.hframes * dolphin_sprite.vframes) - 1:
+		if (dolphin_flip_frame_max > 0):
+			frame_timer += delta;
+			if (frame_timer > frame_timer_max):
+				frame_timer -= frame_timer_max;
+				if (dolphin_sprite.frame + 1 >= dolphin_flip_frame_max):
+					dolphin_flip_frame_max = -1;
+					dolphin_sprite.texture = preload("res://assets/dolphin_animation.png");
+					dolphin_sprite.hframes = 12;
+					dolphin_sprite.flip_h = flip_h_will_be;
+					dolphin_sprite.rotation_degrees = rotation_degrees_will_be;
+				else:
 					dolphin_sprite.frame += 1;
+		else:
+			if (in_move):
+				frame_timer_max = 0.05;
+			else:
+				frame_timer_max = delays[dolphin_sprite.frame];
+	#		elif dolphin_sprite.frame == 2 or dolphin_sprite.frame == 7:
+	#			frame_timer_max = 1.0;
+	#		else:
+	#			frame_timer_max = 0.3;
+			frame_timer += delta;
+			if (frame_timer > frame_timer_max):
+				frame_timer -= frame_timer_max;
+				if (dolphin_sprite.frame == dolphin_sprite.hframes -1):
+					dolphin_sprite.frame = 0;
+				else:
+					if broken and dolphin_sprite.frame >= 4 and post_mortem != 1:
+						pass
+					elif dolphin_sprite.frame < (dolphin_sprite.hframes * dolphin_sprite.vframes) - 1:
+						dolphin_sprite.frame += 1;
 	elif hframes <= 1:
 		pass
 	elif actorname == Name.Hatch:

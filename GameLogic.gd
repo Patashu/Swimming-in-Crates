@@ -1034,12 +1034,15 @@ pushers_list: Array = [], is_move: bool = false, success: int = Success.No) -> i
 		# do facing change now before move happens
 		if (is_move and actor.is_character):
 			if (dir == Vector2.LEFT and !actor.facing_left):
-				set_actor_var(actor, "facing_left", true, chrono);
+				set_actor_var(actor, "facing_left", true, chrono, true);
 			elif (dir == Vector2.RIGHT and actor.facing_left):
-				set_actor_var(actor, "facing_left", false, chrono);
+				set_actor_var(actor, "facing_left", false, chrono, true);
 				
 		if (actor.is_character and chrono < Chrono.TIMELESS):
-			set_actor_var(actor, "facing_vertical", Vector2(0, dir.y), chrono);
+			set_actor_var(actor, "facing_vertical", Vector2(0, dir.y), chrono, true);
+				
+		if (actor.is_character):
+			add_to_animation_server(actor, [Animation.set_next_texture, actor.get_next_texture(), actor.facing_left, actor.facing_vertical, actor.gem_status()]);
 				
 		if actor.has_gem:
 			if actor.pressing:
@@ -1349,7 +1352,7 @@ func end_lose() -> void:
 	lost = false;
 	lost_speaker.stop();
 
-func set_actor_var(actor: ActorBase, prop: String, value, chrono: int) -> void:
+func set_actor_var(actor: ActorBase, prop: String, value, chrono: int, postpone: bool = false) -> void:
 	var old_value = actor.get(prop);
 	if (true):
 		actor.set(prop, value);
@@ -1399,10 +1402,11 @@ func set_actor_var(actor: ActorBase, prop: String, value, chrono: int) -> void:
 #					elif value == -1 and old_value != -1:
 #						add_to_animation_server(actor, [Animation.sfx, "lightland"]);
 		
-		if (prop == "open"):
-			add_to_animation_server(actor, [Animation.open, value]);
-		else:
-			add_to_animation_server(actor, [Animation.set_next_texture, actor.get_next_texture(), actor.facing_left, actor.facing_vertical, actor.gem_status()])
+		if (!postpone):
+			if (prop == "open"):
+				add_to_animation_server(actor, [Animation.open, value]);
+			else:
+				add_to_animation_server(actor, [Animation.set_next_texture, actor.get_next_texture(), actor.facing_left, actor.facing_vertical, actor.gem_status()])
 
 func add_undo_event(event: Array, chrono: int = Chrono.MOVE) -> void:
 	if (chrono == Chrono.MOVE):
