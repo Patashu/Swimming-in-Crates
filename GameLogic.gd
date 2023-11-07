@@ -1363,28 +1363,11 @@ func set_actor_var(actor: ActorBase, prop: String, value, chrono: int, postpone:
 		# sound effects for airborne changes
 		if (prop == "airborne"):
 			pass
-#			if actor.actorname == Actor.Name.Heavy:
-#				if is_retro:
-#					if old_value >= 1 and value <= 0:
-#						add_to_animation_server(actor, [Animation.sfx, "heavyuncoyote"]);
-#					elif old_value == -1 and value != -1:
-#						add_to_animation_server(actor, [Animation.sfx, "heavyunland"]);
-#				else:
-#					if value >= 1 and old_value <= 0:
-#						add_to_animation_server(actor, [Animation.sfx, "heavycoyote"]);
-#					elif value == -1 and old_value != -1:
-#						add_to_animation_server(actor, [Animation.sfx, "heavyland"]);
-#			elif actor.actorname == Actor.Name.Light:
-#				if is_retro:
-#					if old_value >= 1 and value <= 0:
-#						add_to_animation_server(actor, [Animation.sfx, "lightuncoyote"]);
-#					elif old_value == -1 and value != -1:
-#						add_to_animation_server(actor, [Animation.sfx, "lightunland"]);
-#				else:
-#					if value >= 1 and old_value <= 0:
-#						add_to_animation_server(actor, [Animation.sfx, "lightcoyote"]);
-#					elif value == -1 and old_value != -1:
-#						add_to_animation_server(actor, [Animation.sfx, "lightland"]);
+			if actor.is_character:
+				if value >= 1 and old_value <= 0:
+					add_to_animation_server(actor, [Animation.sfx, "dolphincoyote"]);
+				elif value == -1 and old_value != -1:
+					add_to_animation_server(actor, [Animation.sfx, "dolphinland"]);
 		
 		if (!postpone):
 			if (prop == "open"):
