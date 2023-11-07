@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/dolphin one updated frame.png-e0668b4ee7a362c6786058a242b02773.stex"
+path="res://.import/dolphin_flip.png-87c072bd6f40b04e82cafcc8eb4c72b7.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/dolphin one updated frame.png"
-dest_files=[ "res://.import/dolphin one updated frame.png-e0668b4ee7a362c6786058a242b02773.stex" ]
+source_file="res://assets/dolphin_flip.png"
+dest_files=[ "res://.import/dolphin_flip.png-87c072bd6f40b04e82cafcc8eb4c72b7.stex" ]
 
 [params]
 

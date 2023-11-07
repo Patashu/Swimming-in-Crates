@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/dolphin third frame change.png-1969410a169a5276930131ed9bf1c62b.stex"
+path="res://.import/tutorial_arrow_new.png-3113cab06a6c794eab955090a404e77c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/dolphin third frame change.png"
-dest_files=[ "res://.import/dolphin third frame change.png-1969410a169a5276930131ed9bf1c62b.stex" ]
+source_file="res://assets/tutorial_arrow_new.png"
+dest_files=[ "res://.import/tutorial_arrow_new.png-3113cab06a6c794eab955090a404e77c.stex" ]
 
 [params]
 

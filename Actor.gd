@@ -21,6 +21,7 @@ var gem = null;
 var pressing = false;
 var open = false;
 var open_animate = false;
+var dolphin_sprite = null;
 # undo trails logic
 var color = Color(1, 1, 1, 1);
 # animation system logic
@@ -28,6 +29,8 @@ var animation_timer = 0;
 var animation_timer_max = 0.05;
 var animations = [];
 var facing_left = false;
+var facing_vertical = Vector2.ZERO;
+var in_move = false;
 # animated sprites logic
 var frame_timer = 0;
 var frame_timer_max = 0.1;
@@ -63,12 +66,13 @@ enum Name {
 
 func update_graphics() -> void:
 	var tex = get_next_texture();
-	set_next_texture(tex, facing_left, gem_status());
+	set_next_texture(tex, facing_left, facing_vertical, gem_status());
 	open_animate = open;
 
 func get_next_texture() -> Resource:
 	if actorname == Name.Dolphin:
-		return preload("res://assets/dolphin_idle.png");
+		frame_timer_max = 0.3;
+		return null;
 	elif actorname == Name.Hatch:
 		hframes = 7;
 		return preload("res://assets/hatch_spritesheet.png");
@@ -86,15 +90,29 @@ func gem_status() -> Texture:
 	else:
 		return preload("res://assets/gem.png");
 
-func set_next_texture(tex: Texture, facing_left_at_the_time: bool, gem_tex: Texture) -> void:
+func set_next_texture(tex: Texture, facing_left_at_the_time: bool, facing_vertical_at_the_time: Vector2, gem_tex: Texture) -> void:
 	if is_instance_valid(gem) and gem_tex != null:
 		gem.texture = gem_tex;
-	
+
 	# facing updates here, even if the texture didn't change
-	if facing_left_at_the_time:
-		flip_h = true;
-	else:
-		flip_h = false;
+	if (is_character):
+		if facing_left_at_the_time:
+			dolphin_sprite.flip_h = true;
+		else:
+			dolphin_sprite.flip_h = false;
+
+		if (facing_vertical_at_the_time.y == 0):
+			dolphin_sprite.rotation_degrees = 0;
+		elif (facing_vertical_at_the_time.y > 0):
+			if (facing_left_at_the_time):
+				dolphin_sprite.rotation_degrees = -90;
+			else:
+				dolphin_sprite.rotation_degrees = 90;
+		else: #(facing_vertical_at_the_time.y < 0):
+			if (facing_left_at_the_time):
+				dolphin_sprite.rotation_degrees = 90;
+			else:
+				dolphin_sprite.rotation_degrees = -90;
 	
 	if (self.texture == tex):
 		return;
@@ -154,10 +172,12 @@ func phases_into_terrain() -> bool:
 func phases_into_actors() -> bool:
 	return false;
 
+var delays = [0.2, 0.3, 0.4, 0.3, 0.2, 0.15, 0.2, 0.4, 0.3, 0.25, 0.2, 0.15]
+
 func _process(delta: float) -> void:
 	if (is_character):
 		bob_timer += delta;
-		offset.y = sin(bob_timer) + 9;
+		dolphin_sprite.position.y = 8 + sin(bob_timer);
 	
 	#action lines
 	if (airborne != -1):
@@ -188,7 +208,26 @@ func _process(delta: float) -> void:
 				gamelogic.overactorsparticles.add_child(sprite);
 	
 	#animated sprites
-	if hframes <= 1:
+	if actorname == Name.Dolphin:
+		if (in_move):
+			frame_timer_max = 0.05;
+		else:
+			frame_timer_max = delays[dolphin_sprite.frame];
+#		elif dolphin_sprite.frame == 2 or dolphin_sprite.frame == 7:
+#			frame_timer_max = 1.0;
+#		else:
+#			frame_timer_max = 0.3;
+		frame_timer += delta;
+		if (frame_timer > frame_timer_max):
+			frame_timer -= frame_timer_max;
+			if (dolphin_sprite.frame == dolphin_sprite.hframes - 1):
+				dolphin_sprite.frame = 0;
+			else:
+				if broken and dolphin_sprite.frame >= 4 and post_mortem != 1:
+					pass
+				elif dolphin_sprite.frame < (dolphin_sprite.hframes * dolphin_sprite.vframes) - 1:
+					dolphin_sprite.frame += 1;
+	elif hframes <= 1:
 		pass
 	elif actorname == Name.Hatch:
 		frame_timer += delta;
@@ -206,16 +245,21 @@ func _process(delta: float) -> void:
 		frame_timer += delta;
 		if (frame_timer > frame_timer_max):
 			frame_timer -= frame_timer_max;
-			if broken and frame >= 4 and post_mortem != 1:
-				pass
-			elif frame < (hframes * vframes) - 1:
-				frame += 1;
+			if (frame == hframes - 1):
+				frame = 0;
+			else:
+				if broken and frame >= 4 and post_mortem != 1:
+					pass
+				elif frame < (hframes * vframes) - 1:
+					frame += 1;
 	
 	# animation system stuff
+	in_move = false;
 	if (animations.size() > 0):
 		var current_animation = animations[0];
 		var is_done = true;
 		if (current_animation[0] == 0): #move
+			in_move = true;
 			animation_timer_max = 0.083;
 			position -= current_animation[1]*(animation_timer/animation_timer_max)*16;
 			animation_timer += delta;
@@ -227,6 +271,7 @@ func _process(delta: float) -> void:
 				is_done = false;
 				position += current_animation[1]*(animation_timer/animation_timer_max)*16;
 		elif (current_animation[0] == 1): #bump
+			in_move = true;
 			animation_timer_max = 0.1;
 			var bump_amount = (animation_timer/animation_timer_max);
 			if (bump_amount > 0.5):
@@ -244,7 +289,7 @@ func _process(delta: float) -> void:
 				bump_amount *= 0.2;
 				position += current_animation[1]*bump_amount*16;
 		elif (current_animation[0] == 2): #set_next_texture
-			set_next_texture(current_animation[1], current_animation[2], current_animation[3]);
+			set_next_texture(current_animation[1], current_animation[2], current_animation[3], current_animation[4]);
 		elif (current_animation[0] == 3): #sfx
 			gamelogic.play_sound(current_animation[1]);
 		elif (current_animation[0] == 4): #fade

@@ -730,6 +730,14 @@ func make_actors() -> void:
 			player.color = arbitrary_color;
 			if (player.pos.x > (map_x_max / 2)):
 				player.facing_left = true;
+			player.dolphin_sprite = Sprite.new();
+			player.dolphin_sprite.texture = preload("res://assets/dolphin_animation.png");
+			player.dolphin_sprite.hframes = 12;
+			player.dolphin_sprite.centered = true;
+			player.dolphin_sprite.position = Vector2(8, 8);
+			player.dolphin_sprite.offset = Vector2.ZERO;
+			player.add_child(player.dolphin_sprite);
+			player.texture = null;
 			player.update_graphics();
 	
 	# crates
@@ -1029,6 +1037,9 @@ pushers_list: Array = [], is_move: bool = false, success: int = Success.No) -> i
 				set_actor_var(actor, "facing_left", true, chrono);
 			elif (dir == Vector2.RIGHT and actor.facing_left):
 				set_actor_var(actor, "facing_left", false, chrono);
+				
+		if (actor.is_character and chrono < Chrono.TIMELESS):
+			set_actor_var(actor, "facing_vertical", Vector2(0, dir.y), chrono);
 				
 		if actor.has_gem:
 			if actor.pressing:
@@ -1391,7 +1402,7 @@ func set_actor_var(actor: ActorBase, prop: String, value, chrono: int) -> void:
 		if (prop == "open"):
 			add_to_animation_server(actor, [Animation.open, value]);
 		else:
-			add_to_animation_server(actor, [Animation.set_next_texture, actor.get_next_texture(), actor.facing_left, actor.gem_status()])
+			add_to_animation_server(actor, [Animation.set_next_texture, actor.get_next_texture(), actor.facing_left, actor.facing_vertical, actor.gem_status()])
 
 func add_undo_event(event: Array, chrono: int = Chrono.MOVE) -> void:
 	if (chrono == Chrono.MOVE):
@@ -1426,6 +1437,7 @@ func clone_actor_but_dont_add_it(actor : Actor) -> Actor:
 	new.can_swap = actor.can_swap;
 	new.is_character = actor.is_character;
 	new.facing_left = actor.facing_left;
+	new.facing_vertical = actor.facing_vertical;
 	new.flip_h = actor.flip_h;
 	new.frame_timer = actor.frame_timer;
 	new.frame_timer_max = actor.frame_timer_max;
