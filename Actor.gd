@@ -359,9 +359,11 @@ func _process(delta: float) -> void:
 						sprite.set_script(preload("res://FadingSprite.gd"));
 						sprite.texture = preload("res://assets/bubblesmall.png")
 						sprite.position = position + Vector2(gamelogic.cell_size/2, gamelogic.cell_size/2);
+						sprite.position += current_animation[1].rotated(PI/2)*(i-5);
 						sprite.centered = true;
 						sprite.fadeout_timer_max = 0.5;
-						sprite.velocity = Vector2(gamelogic.rng.randf_range(-24, 24), gamelogic.rng.randf_range(-24, 24));
+						sprite.velocity = 16*current_animation[1].rotated((i-5)/5.0);
+						sprite.velocity += Vector2(gamelogic.rng.randf_range(-4, 4), gamelogic.rng.randf_range(-4, 4));
 						overactorsparticles.add_child(sprite);	
 			
 		elif (current_animation[0] == 1): #bump
