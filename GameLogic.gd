@@ -835,8 +835,20 @@ func calculate_map_size() -> void:
 				map_x_max = tile.x;
 			if tile.y > map_y_max:
 				map_y_max = tile.y;
+	if ((map_x_max) < map_x_max_max/2 and (map_y_max) < map_y_max_max/2):
+		terrainmap.scale = Vector2(2.0, 2.0);
+	else:
+		terrainmap.scale = Vector2(1.0, 1.0);
+	underterrainfolder.scale = terrainmap.scale;
+	actorsfolder.scale = terrainmap.scale;
+	underactorsparticles.scale = terrainmap.scale;
+	overactorsparticles.scale = terrainmap.scale;
+	checkerboard.rect_scale = terrainmap.scale;
 	terrainmap.position.x = (map_x_max_max-map_x_max)*(cell_size/2)-8;
 	terrainmap.position.y = (map_y_max_max-map_y_max)*(cell_size/2)+12;
+	if (terrainmap.scale == Vector2(2.0, 2.0)):
+		terrainmap.position.x = (map_x_max_max-map_x_max*2)*(cell_size/2)-8;
+		terrainmap.position.y = (map_y_max_max-map_y_max*2)*(cell_size/2)+12;
 	underterrainfolder.position = terrainmap.position;
 	actorsfolder.position = terrainmap.position;
 	underactorsparticles.position = terrainmap.position;
@@ -2499,7 +2511,11 @@ var last_dir_release_times = [0, 0, 0, 0];
 func _process(delta: float) -> void:
 	bubble_timer += delta;
 	var water_tiles = get_used_cells_by_id_one_array(Tiles.Water);
-	bubble_timer_max = 5.0/water_tiles.size();
+	if (water_tiles.size() > 0):
+		bubble_timer_max = 5.0/water_tiles.size();
+	else:
+		bubble_timer = 0.0;
+		bubble_timer_max = 1.0;
 	if (bubble_timer >= bubble_timer_max):
 		bubble_timer -= bubble_timer_max;
 		var random_water_tile = water_tiles[rng.randi_range(0, water_tiles.size() - 1)];
