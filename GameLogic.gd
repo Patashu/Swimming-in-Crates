@@ -135,9 +135,6 @@ var level_number = 0
 var level_name = "Blah Blah Blah";
 var level_replay = "";
 var level_author = "";
-var heavy_max_moves = -1;
-var light_max_moves = -1;
-var clock_turns : String = "";
 var map_x_max : int = 0;
 var map_y_max : int = 0;
 var map_x_max_max : int = 31; # can change these if I want to adjust hori/vertical scrolling
@@ -1056,7 +1053,7 @@ pushers_list: Array = [], is_move: bool = false, success: int = Success.No) -> i
 		# bump animation always happens, I think?
 		add_to_animation_server(actor, [Animation.bump, dir]);
 	return success;
-		
+	
 func adjust_turn(amount: int) -> void:
 	turn += amount;
 	check_won();
@@ -2142,11 +2139,10 @@ func update_level_label() -> void:
 		levellabel.text += " (By " + level_author + ")"
 	if (doing_replay):
 		levellabel.text += " (REPLAY)"
-		if (heavy_max_moves < 11 and light_max_moves < 11):
-			if (using_controller):
-				levellabel.text += " (L2/R2 ADJUST SPEED)";
-			else:
-				pass #there are now virtual buttons for kb+m players
+		if (using_controller):
+			levellabel.text += " (L2/R2 ADJUST SPEED)";
+		else:
+			pass #there are now virtual buttons for kb+m players
 	if save_file["levels"].has(level_name) and save_file["levels"][level_name].has("won") and save_file["levels"][level_name]["won"]:
 		if (levelstar.next_modulates.size() > 0):
 			# in the middle of a flash from just having won
