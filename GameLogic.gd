@@ -676,7 +676,8 @@ func ready_map() -> void:
 		var wiring_split = wiring.split(",");
 		for wire in wiring_split:
 			var wire_parts = wire.split("->");
-			wires.append([int(wire_parts[0]), int(wire_parts[1])]);
+			if (wire_parts.size() > 2):
+				wires.append([int(wire_parts[0]), int(wire_parts[1])]);
 	
 	calculate_map_size();
 	make_actors();
@@ -2574,7 +2575,8 @@ func load_custom_level(custom: String) -> void:
 	var wiring_split = wiring.split(",");
 	for wire in wiring_split:
 		var wire_parts = wire.split("->");
-		wires.append([int(wire_parts[0]), int(wire_parts[1])]);
+		if (wire_parts.size() >= 2):
+			wires.append([int(wire_parts[0]), int(wire_parts[1])]);
 	map_x_max = int(level_info["map_x_max"]);
 	map_y_max = int(level_info["map_y_max"]);
 	
