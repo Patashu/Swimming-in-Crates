@@ -282,7 +282,7 @@ func load_game():
 func _ready() -> void:
 	# Call once when the game is booted up.
 	menubutton.connect("pressed", self, "escape");
-	levelstar.scale = Vector2(1.0/6.0, 1.0/6.0);
+	#levelstar.scale = Vector2(1.0/6.0, 1.0/6.0);
 	winlabel.call_deferred("change_text", "You have won!\n\n[Enter]: Watch Replay\nMade by Patashu (Everything Else) and Teal Knight (Art + Level Design Help)");
 	connect_virtual_buttons();
 	prepare_audio();
@@ -925,6 +925,7 @@ func prepare_audio() -> void:
 	sounds["step"] = preload("res://sfx/step.ogg");
 	sounds["swap"] = preload("res://sfx/swap.ogg");
 	sounds["switch"] = preload("res://sfx/switch.ogg");
+	sounds["unfall"] = preload("res://sfx/unfall.ogg");
 	sounds["unlock"] = preload("res://sfx/unlock.ogg");
 	sounds["voidundo"] = preload("res://sfx/voidundo.ogg");
 	sounds["waterenter"] = preload("res://sfx/waterenter.ogg");
@@ -1080,7 +1081,10 @@ pushers_list: Array = [], is_move: bool = false, success: int = Success.No) -> i
 		if (was_push):
 			add_to_animation_server(actor, [Animation.sfx, "push"]);
 		if (was_fall):
-			add_to_animation_server(actor, [Animation.sfx, "fall"]);
+			if (dir.y < 0):
+				add_to_animation_server(actor, [Animation.sfx, "unfall"]);
+			else:
+				add_to_animation_server(actor, [Animation.sfx, "fall"]);
 
 		var water_state = 0;
 		if (terrain_in_tile(actor.pos).has(Tiles.Water) and (chrono == Chrono.TIMELESS or !terrain_in_tile(old_pos).has(Tiles.Water))):
@@ -2244,7 +2248,7 @@ func update_level_label() -> void:
 		var string_size = preload("res://standardfont.tres").get_string_size(levellabel.text);
 		var label_middle = levellabel.rect_position.x + int(floor(levellabel.rect_size.x / 2));
 		var string_left = label_middle - int(floor(string_size.x/2));
-		levelstar.position = Vector2(string_left-14, levellabel.rect_position.y);
+		levelstar.position = Vector2(string_left-16, levellabel.rect_position.y - 1);
 	else:
 		levelstar.finish_animations();
 		levelstar.modulate = Color(1, 1, 1, 0);

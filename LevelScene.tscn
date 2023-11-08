@@ -80,7 +80,6 @@ valign = 1
 
 [node name="LevelStar" type="Sprite" parent="."]
 modulate = Color( 1, 1, 1, 0 )
-scale = Vector2( 0.167, 0.167 )
 texture = ExtResource( 7 )
 centered = false
 script = ExtResource( 38 )
