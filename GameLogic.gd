@@ -677,7 +677,7 @@ func ready_map() -> void:
 		var wiring_split = wiring.split(",");
 		for wire in wiring_split:
 			var wire_parts = wire.split("->");
-			if (wire_parts.size() > 2):
+			if (wire_parts.size() >= 2):
 				wires.append([int(wire_parts[0]), int(wire_parts[1])]);
 	
 	calculate_map_size();
