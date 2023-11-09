@@ -1308,7 +1308,7 @@ func terrain_is_hazardous(actor: Actor, pos: Vector2) -> int:
 #		return Durability.SPIKES;
 	return -1;
 	
-func strength_check(strength: int, heaviness: int) -> bool:
+func strength_check(strength: float, heaviness: float) -> bool:
 	if (heaviness == Heaviness.NONE):
 		return strength >= Strength.NONE;
 	if (heaviness == Heaviness.CRYSTAL):
@@ -1354,27 +1354,28 @@ pushers_list: Array = []) -> int:
 		for actor_there in pushables_there:
 			# Strength Rule
 			# with a twist for Swimming in Crates - buoyant crates can stack up and outnumber weaker opposition.
+			# One more special rule to prevent grossness - a float crate on top of the water is '0.5'.
 			if (is_gravity and !actor_there.is_character and !pushers_list[0].is_character):
 				strength_modifier = 0;
-				var push_fall = falling_direction(pushers_list[0]).y;
+				var push_fall = falling_direction(pushers_list[0], true).y;
 				for pusher in pushers_list:
 					if !pusher.is_character:
-						var pusher_fall = falling_direction(pusher).y;
-						if push_fall == pusher_fall:
-							strength_modifier += 1;
-						elif push_fall * -1 == pusher_fall:
-							strength_modifier -= 1;
-				var dest_fall = falling_direction(actor_there).y;
-				if push_fall == dest_fall:
-					strength_modifier += 1;
-				elif push_fall * -1 == dest_fall:
-					strength_modifier -= 1;
+						var pusher_fall = falling_direction(pusher, true).y;
+						if sign(push_fall) == sign(pusher_fall):
+							strength_modifier += abs(push_fall);
+						elif sign(push_fall * -1) == sign(pusher_fall):
+							strength_modifier -= abs(pusher_fall);
+				var dest_fall = falling_direction(actor_there, true).y;
+				if sign(push_fall) == sign(dest_fall):
+					strength_modifier += abs(push_fall);
+				elif sign(push_fall * -1) == sign(dest_fall):
+					strength_modifier -= abs(dest_fall);
 			if !strength_check(actor.strength + strength_modifier, actor_there.heaviness):
 				if (actor.phases_into_actors()):
 					pushables_there.clear();
 					break;
 				else:
-					pushers_list.pop_front();
+					pushers_list.pop_back();
 					return Success.No;
 		var result = Success.Yes;
 				
@@ -1395,7 +1396,7 @@ pushers_list: Array = []) -> int:
 					move_actor_relative(actor_there, -dir, chrono, false, is_gravity, [], false, Success.Yes);
 					pushables_there.erase(actor_there);
 				else:
-					pushers_list.pop_front();
+					pushers_list.pop_back();
 					return Success.No;
 			if actor_there_result == Success.Surprise:
 				result = Success.Surprise;
@@ -1412,7 +1413,7 @@ pushers_list: Array = []) -> int:
 				for actor_there in pushables_there:
 					actor_there.just_moved = false;
 		
-		pushers_list.pop_front();
+		pushers_list.pop_back();
 		return result;
 	
 	return Success.Yes;
@@ -1932,8 +1933,9 @@ func anything_happened(destructive: bool = true) -> bool:
 	undo_buffer.pop_at(turn);
 	return false;
 
-func falling_direction(actor: Actor) -> Vector2:
+func falling_direction(actor: Actor, for_strength: bool = false) -> Vector2:
 	# logic: floating things float up to and on top of water. neutral things float if in water. sinking things sink.
+	# added logic: for_strength, neutrally buoyant float crates are a 0.5.
 	if actor.buoyancy > 0:
 		return Vector2.DOWN; #always falls
 	elif actor.buoyancy == 0:
@@ -1947,6 +1949,8 @@ func falling_direction(actor: Actor) -> Vector2:
 			return Vector2.UP;
 		terrain = terrain_in_tile(actor.pos + Vector2.DOWN);
 		if terrain.has(Tiles.Water):
+			if (for_strength):
+				return Vector2(0, 0.5);
 			return Vector2.ZERO;
 		return Vector2.DOWN;
 
