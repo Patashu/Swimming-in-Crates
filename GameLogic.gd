@@ -2437,8 +2437,11 @@ func unwin() -> void:
 		save_file["levels"][level_name].clear();
 	save_game();
 	update_level_label();
-	
+
 func serialize_current_level() -> String:
+	if (is_custom):
+		return custom_string;
+	
 	# keep in sync with LevelEditor.gd serialize_current_level()
 	var result = "SwimmingInCratesPuzzleStart: " + level_name + " by " + level_author + "\n";
 	var level_metadata = {};
