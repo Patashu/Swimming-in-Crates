@@ -121,6 +121,7 @@ enum Tiles {
 	Water,
 	NoDolphin,
 	AutoGrate,
+	NoCrate,
 }
 
 # information about the level
@@ -1276,6 +1277,9 @@ chrono: int) -> int:
 		match id:
 			Tiles.Wall:
 				result = Success.No;
+			Tiles.NoCrate:
+				if !actor.is_character:
+					result = Success.No;
 			Tiles.NoDolphin:
 				if actor.is_character:
 					result = Success.No;
