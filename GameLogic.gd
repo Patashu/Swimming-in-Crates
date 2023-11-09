@@ -2067,10 +2067,14 @@ func time_passes(chrono: int) -> void:
 	animation_substep(chrono);
 	
 func bottom_up(a, b) -> bool:
+	# 1) falling crates in bottom up order
+	# 2) rising crates in top down order
 	var fall_a = falling_direction(a);
 	var fall_b = falling_direction(b);
 	if (fall_a != fall_b):
 		return fall_a > fall_b;
+	if (fall_a.y < 0):
+		return a.pos.y < b.pos.y;
 	return a.pos.y > b.pos.y;
 	
 func replay_interval() -> float:
