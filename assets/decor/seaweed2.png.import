@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/coral.png-16e7993421f52d25065e0e1170b60c49.stex"
+path="res://.import/seaweed2.png-5e026d8754794ff7089ea8f5952fd056.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/coral.png"
-dest_files=[ "res://.import/coral.png-16e7993421f52d25065e0e1170b60c49.stex" ]
+source_file="res://assets/decor/seaweed2.png"
+dest_files=[ "res://.import/seaweed2.png-5e026d8754794ff7089ea8f5952fd056.stex" ]
 
 [params]
 

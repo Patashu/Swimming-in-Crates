@@ -122,6 +122,12 @@ enum Tiles {
 	NoDolphin,
 	AutoGrate,
 	NoCrate,
+	DecorCoral,
+	DecorSeaweed,
+	DecorFish1,
+	DecorFish2,
+	DecorFish3,
+	DecorFish4,
 }
 
 # information about the level
@@ -657,6 +663,8 @@ func ready_map() -> void:
 	for goal in goals:
 		goal.queue_free();
 	goals.clear();
+	for whatever in underterrainfolder.get_children():
+		whatever.queue_free();
 	for whatever in underactorsparticles.get_children():
 		whatever.queue_free();
 	for whatever in overactorsparticles.get_children():
@@ -815,9 +823,9 @@ func make_actors() -> void:
 	extract_actors(Tiles.CrateSinkNothing, Actor.Name.CrateSinkNothing,
 	Heaviness.STEEL, Strength.WOODEN, Durability.FIRE, 1, false, Color(0.5, 0.5, 0.5, 1), 1, false);
 	
-	
-	
 	find_gems();
+	
+	make_fish();
 	
 func setup_wiring() -> void:
 	buttons = get_used_cells_by_id_one_array(Tiles.Switch);
@@ -873,7 +881,27 @@ func find_gems() -> void:
 			for actor in actors:
 				if actor.pos == tile and !actor.has_gem:
 					actor.gain_gem();
+
+func make_fish() -> void:
+	make_fish_singular(Tiles.DecorFish1);
+	make_fish_singular(Tiles.DecorFish2);
+	make_fish_singular(Tiles.DecorFish3);
+	make_fish_singular(Tiles.DecorFish4);
 	
+func make_fish_singular(id: int) -> void:
+	var layers_tiles = get_used_cells_by_id_all_layers(id);
+	for i in range(layers_tiles.size()):
+		var tiles = layers_tiles[i];
+		for tile in tiles:
+			terrain_layers[i].set_cellv(tile, -1);
+			var fish = Sprite.new();
+			fish.texture = terrainmap.tile_set.tile_get_texture(id);
+			fish.set_script(preload("res://Fish.gd"));
+			fish.centered = true;
+			fish.position = terrainmap.map_to_world(tile) + Vector2(cell_size/2, cell_size/2);
+			fish.gamelogic = self;
+			underterrainfolder.add_child(fish);
+
 func calculate_map_size() -> void:
 	map_x_max = 0;
 	map_y_max = 0;

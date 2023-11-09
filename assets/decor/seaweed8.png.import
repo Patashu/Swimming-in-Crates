@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/seaweed.png-bc2336aa03e535388f274bed82b1b87c.stex"
+path="res://.import/seaweed8.png-b53d6c7b9a45d9c249f3b16d8857ea9a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/seaweed.png"
-dest_files=[ "res://.import/seaweed.png-bc2336aa03e535388f274bed82b1b87c.stex" ]
+source_file="res://assets/decor/seaweed8.png"
+dest_files=[ "res://.import/seaweed8.png-b53d6c7b9a45d9c249f3b16d8857ea9a.stex" ]
 
 [params]
 

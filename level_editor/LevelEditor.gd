@@ -25,6 +25,12 @@ enum Tiles {
 	NoDolphin,
 	AutoGrate,
 	NoCrate,
+	DecorCoral,
+	DecorSeaweed,
+	DecorFish1,
+	DecorFish2,
+	DecorFish3,
+	DecorFish4,
 }
 
 onready var gamelogic = get_node("/root/LevelScene").gamelogic;
