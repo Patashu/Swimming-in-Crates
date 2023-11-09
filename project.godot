@@ -160,6 +160,11 @@ _global_script_classes=[ {
 "path": "res://SparkleSpawner.gd"
 }, {
 "base": "Sprite",
+"class": "SparkleSprite",
+"language": "GDScript",
+"path": "res://SparkleSprite.gd"
+}, {
+"base": "Sprite",
 "class": "StarSprite",
 "language": "GDScript",
 "path": "res://StarSprite.gd"
@@ -195,6 +200,7 @@ _global_script_class_icons={
 "Settings": "",
 "Shade": "",
 "SparkleSpawner": "",
+"SparkleSprite": "",
 "StarSprite": ""
 }
 

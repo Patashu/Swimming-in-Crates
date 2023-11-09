@@ -144,6 +144,7 @@ var map_x_max_max : int = 31; # can change these if I want to adjust hori/vertic
 var map_y_max_max : int = 15;
 var terrain_layers = []
 var voidlike_puzzle = false;
+var first_sparkle = false;
 
 # information about the actors and their state
 var player : Actor = null
@@ -616,7 +617,7 @@ func initialize_level_list() -> void:
 	chapter_standard_starting_levels.push_back(level_filenames.size());
 	chapter_standard_unlock_requirements.push_back(0);
 	chapter_skies.push_back(Color("#0E0E12"));
-	chapter_tracks.push_back(-1);
+	chapter_tracks.push_back(0);
 	level_filenames.push_back("Level")
 	chapter_advanced_starting_levels.push_back(level_filenames.size());
 	chapter_advanced_unlock_requirements.push_back(0);
@@ -689,6 +690,27 @@ func ready_map() -> void:
 	
 	ready_tutorial();
 	update_level_label();
+	
+	intro_sparkle();
+	
+func intro_sparkle() -> void:
+	player.dolphin_sprite.texture = null;
+	var sprite = Sprite.new();
+	sprite.set_script(preload("res://SparkleSprite.gd"));
+	sprite.texture = preload("res://assets/appearify_spark.png")
+	sprite.target = player;
+	sprite.offset_by = Vector2(cell_size/2, cell_size/2);
+	sprite.centered = true;
+	sprite.hframes = 3;
+	sprite.timer_max = 3.0;
+	if (first_sparkle):
+		sprite.timer = 2.0;
+	sprite.going_in = true;
+	player.sparkle = sprite;
+	player.first_sparkle = first_sparkle;
+	overactorsparticles.add_child(sprite);
+	
+	first_sparkle = true;
 	
 func ready_tutorial() -> void:
 	metainfolabel.visible = true;
@@ -763,7 +785,6 @@ func make_actors() -> void:
 			player.dolphin_sprite.position = Vector2(8, 8);
 			player.dolphin_sprite.offset = Vector2.ZERO;
 			player.add_child(player.dolphin_sprite);
-			player.texture = null;
 			player.update_graphics();
 	
 	# crates
@@ -933,6 +954,9 @@ func prepare_audio() -> void:
 	sounds["waterenter"] = preload("res://sfx/waterenter.ogg");
 	sounds["waterexit"] = preload("res://sfx/waterexit.ogg");
 	sounds["winsic"] = preload("res://sfx/winsic.ogg");
+
+	music_tracks.append(preload("res://music/Dancing with Dolphins.ogg"));
+	music_info.append("Patashu - Dancing with Dolphins");
 
 	for i in range (8):
 		var speaker = AudioStreamPlayer.new();
@@ -1698,7 +1722,7 @@ func restart(_is_silent: bool = false) -> void:
 	play_sound("restart");
 	undo_effect_strength = 0.1;
 	undo_effect_per_second = undo_effect_strength*(1/0.5);
-	finish_animations(Chrono.TIMELESS);
+	#finish_animations(Chrono.TIMELESS);
 	undo_effect_color = arbitrary_color;
 	
 func escape() -> void:

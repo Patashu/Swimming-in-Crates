@@ -39,6 +39,8 @@ var rotation_degrees_will_be = 0;
 var in_water = false;
 var in_water_animation = false;
 var bob_timer = 0;
+var sparkle = null;
+var first_sparkle = false;
 # animated sprites logic
 var frame_timer = 0;
 var frame_timer_max = 0.1;
@@ -78,6 +80,9 @@ func update_graphics() -> void:
 	in_water_animation = in_water;
 	set_next_texture(tex, facing_left, facing_vertical, gem_status());
 	open_animate = open;
+	if is_instance_valid(sparkle):
+		sparkle.queue_free();
+		sparkle = null;
 
 func get_next_texture() -> Resource:
 	if actorname == Name.Dolphin:
@@ -236,6 +241,11 @@ var delays = [0.2, 0.3, 0.4, 0.3, 0.2, 0.15, 0.2, 0.4, 0.3, 0.25, 0.2, 0.15]
 
 func _process(delta: float) -> void:
 	if (is_character):
+		if (sparkle != null and !is_instance_valid(sparkle)):
+			dolphin_sprite.texture = preload("res://assets/appearify_dolphin.png");
+			dolphin_sprite.hframes = 8;
+			dolphin_sprite.frame = 0;
+			sparkle = null;
 		if in_water_animation:
 			bob_timer += delta;
 		else:
@@ -289,6 +299,10 @@ func _process(delta: float) -> void:
 				frame_timer_max = 0.05;
 			else:
 				frame_timer_max = delays[dolphin_sprite.frame];
+			
+			if (dolphin_sprite.texture == preload("res://assets/appearify_dolphin.png") and first_sparkle):
+				frame_timer_max /= 3;
+		
 	#		elif dolphin_sprite.frame == 2 or dolphin_sprite.frame == 7:
 	#			frame_timer_max = 1.0;
 	#		else:
@@ -297,7 +311,12 @@ func _process(delta: float) -> void:
 			if (frame_timer > frame_timer_max):
 				frame_timer -= frame_timer_max;
 				if (dolphin_sprite.frame == dolphin_sprite.hframes -1):
-					dolphin_sprite.frame = 0;
+					if (dolphin_sprite.texture == preload("res://assets/appearify_dolphin.png")):
+						dolphin_sprite.texture = preload("res://assets/dolphin_animation.png");
+						dolphin_sprite.hframes = 12;
+						dolphin_sprite.frame = 1;
+					else:
+						dolphin_sprite.frame = 0;
 				else:
 					if broken and dolphin_sprite.frame >= 4 and post_mortem != 1:
 						pass
@@ -393,13 +412,25 @@ func _process(delta: float) -> void:
 		elif (current_animation[0] == 3): #sfx
 			gamelogic.play_sound(current_animation[1]);
 		elif (current_animation[0] == 4): #fade
-			animation_timer_max = 3;
+			animation_timer_max = 1;
 			animation_timer += delta;
+			dolphin_sprite.texture = preload("res://assets/disappearify_dolphin.png");
+			dolphin_sprite.hframes = 8;
+			dolphin_sprite.frame = clamp(int(floor(dolphin_sprite.hframes*((animation_timer_max-animation_timer)/animation_timer_max))), 0, dolphin_sprite.hframes - 1);
 			if (animation_timer > animation_timer_max):
 				self.modulate.a = 0;
+				var sprite = Sprite.new();
+				sprite.set_script(preload("res://SparkleSprite.gd"));
+				sprite.texture = preload("res://assets/appearify_spark.png")
+				sprite.target = self;
+				sprite.offset_by = Vector2(gamelogic.cell_size/2, gamelogic.cell_size/2);
+				sprite.centered = true;
+				sprite.hframes = 3;
+				sprite.timer_max = 3.2;
+				sprite.going_in = false;
+				gamelogic.overactorsparticles.add_child(sprite);
 			else:
 				is_done = false;
-				self.modulate.a = 1-(animation_timer/animation_timer_max);
 		elif (current_animation[0] == 5): #open
 			open_animate = current_animation[1];
 			if (open_animate):
