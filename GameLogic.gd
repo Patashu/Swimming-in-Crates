@@ -1827,11 +1827,14 @@ func setup_chapter_etc() -> void:
 		target_sky = chapter_skies[chapter];
 	if (target_track != chapter_tracks[chapter]):
 		target_track = chapter_tracks[chapter];
-		if (current_track == -1):
-			play_next_song();
-		else:
-			fadeout_timer = max(fadeout_timer, 0); #so if we're in the middle of a fadeout it doesn't reset
-			fadeout_timer_max = 3.0;
+		# the swimming in crates special
+		fadeout_timer = 0.0;
+		fadeout_timer_max = 3.0;
+#		if (current_track == -1):
+#			play_next_song();
+#		else:
+#			fadeout_timer = max(fadeout_timer, 0); #so if we're in the middle of a fadeout it doesn't reset
+#			fadeout_timer_max = 3.0;
 	
 func play_next_song() -> void:
 	current_track = target_track;
