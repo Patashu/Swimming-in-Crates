@@ -969,6 +969,7 @@ func prepare_audio() -> void:
 	sounds["dolphincoyote"] = preload("res://sfx/dolphincoyote.ogg");
 	sounds["dolphinland"] = preload("res://sfx/dolphinland.ogg");
 	sounds["fall"] = preload("res://sfx/fall.ogg");
+	sounds["intro"] = preload("res://sfx/intro.ogg");
 	sounds["involuntarybumplight"] = preload("res://sfx/involuntarybumplight.ogg");
 	sounds["involuntarybumpother"] = preload("res://sfx/involuntarybumpother.ogg");
 	sounds["metarestart"] = preload("res://sfx/metarestart.ogg");
@@ -1828,6 +1829,7 @@ func setup_chapter_etc() -> void:
 	if (target_track != chapter_tracks[chapter]):
 		target_track = chapter_tracks[chapter];
 		# the swimming in crates special
+		play_sound("intro");
 		fadeout_timer = 0.0;
 		fadeout_timer_max = 3.0;
 #		if (current_track == -1):
