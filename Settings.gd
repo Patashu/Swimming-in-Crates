@@ -27,6 +27,11 @@ func floating_text(text: String) -> void:
 	label.text = text;
 
 func _ready() -> void:
+	var os_name = OS.get_name();
+	var is_fixed_size = false;
+	if (os_name == "HTML5" or os_name == "Android" or os_name == "iOS"):
+		is_fixed_size = true;
+	
 	okbutton.connect("pressed", self, "destroy");
 	okbutton.grab_focus();
 	if (gamelogic.save_file.has("vsync_enabled")):
@@ -58,6 +63,11 @@ func _ready() -> void:
 	animationslider.connect("value_changed", self, "_animationslider_value_changed");
 	puzzlecheckerboard.connect("pressed", self, "_puzzlecheckerboard_pressed");
 	virtualbuttons.connect("value_changed", self, "_virtualbuttons_value_changed");
+	
+	if (is_fixed_size):
+		$Holder/LabelResolutionMultiplier.queue_free();
+		vsync.queue_free();
+		pixelscale.queue_free();
 
 func _vsync_pressed() -> void:
 	if (gamelogic.ui_stack.size() > 0 and gamelogic.ui_stack[gamelogic.ui_stack.size() - 1] != self):
