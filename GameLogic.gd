@@ -264,6 +264,10 @@ func default_save_file() -> void:
 		save_file["sfx_volume"] = 0.0
 	if (!save_file.has("fanfare_volume")):
 		save_file["fanfare_volume"] = 0.0
+	if (!save_file.has("virtual_buttons")):
+		save_file["virtual_buttons"] = 1;
+		
+	react_to_save_file_update();
 
 func load_game():
 	var file = File.new()
@@ -283,9 +287,7 @@ func load_game():
 	else:
 		return default_save_file();
 	
-	default_save_file();
-	
-	react_to_save_file_update();
+	return default_save_file();
 
 func _ready() -> void:
 	# Call once when the game is booted up.
