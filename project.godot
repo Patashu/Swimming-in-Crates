@@ -203,6 +203,7 @@ _global_script_class_icons={
 config/name="Swimming in Crates"
 config/description="A one screen puzzle game for Confunding Calendar 2023."
 run/main_scene="res://LevelScene.tscn"
+boot_splash/image="res://assets/banner.png"
 boot_splash/fullsize=false
 boot_splash/use_filter=false
 boot_splash/bg_color=Color( 0.054902, 0.054902, 0.0705882, 1 )
