@@ -1395,6 +1395,7 @@ pushers_list: Array = []) -> int:
 	# handle pushing
 	var actors_there = actors_in_tile(dest);
 	var pushables_there = [];
+	var just_here_to_swap = [];
 	for actor_there in actors_there:
 		if actor_there.pushable():
 			pushables_there.push_back(actor_there);
@@ -1434,14 +1435,19 @@ pushers_list: Array = []) -> int:
 					pushables_there.clear();
 					break;
 				else:
-					pushers_list.pop_back();
-					return Success.No;
+					if (actor.is_character and actor_there.can_swap):
+						just_here_to_swap.append(actor_there);
+					else:
+						pushers_list.pop_back();
+						return Success.No;
 		var result = Success.Yes;
 				
 		var surprises = [];
 		result = Success.Yes;
 		for actor_there in pushables_there:
-			var actor_there_result = move_actor_relative(actor_there, dir, chrono, true, is_gravity, pushers_list);
+			var actor_there_result = Success.No;
+			if (!just_here_to_swap.has(actor_there)):
+				actor_there_result = move_actor_relative(actor_there, dir, chrono, true, is_gravity, pushers_list);
 			if actor_there_result == Success.No:
 				if (actor.phases_into_actors()):
 					pushables_there.clear();
@@ -1450,7 +1456,8 @@ pushers_list: Array = []) -> int:
 				elif (!actor.broken and pushables_there.size() == 1 and actor_there.can_swap and actor.is_character and !is_gravity):
 					# When making a non-gravity move, if the push fails, Dolphin can swap with a swappable crate.
 					# since swappable crate did a bump, Dolphin needs to do a bump too to sync up animations
-					add_to_animation_server(actor, [Animation.bump, dir, -1]);
+					if (!just_here_to_swap.has(actor_there)):
+						add_to_animation_server(actor, [Animation.bump, dir, -1]);
 					add_to_animation_server(actor, [Animation.swap, dir]);
 					move_actor_relative(actor_there, -dir, chrono, false, is_gravity, [], false, Success.Yes);
 					pushables_there.erase(actor_there);
