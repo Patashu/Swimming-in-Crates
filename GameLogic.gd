@@ -752,7 +752,7 @@ func make_actors() -> void:
 	
 	#hatches
 	extract_actors(Tiles.Hatch, Actor.Name.Hatch,
-	Heaviness.SUPERHEAVY, Strength.WOODEN, Durability.NOTHING, 0, false, Color(0.5, 0.5, 0.5, 1), 0, true);
+	Heaviness.SUPERHEAVY, Strength.WOODEN, Durability.NOTHING, 0, false, Color(0.5, 0.5, 0.5, 1), 0, false);
 	
 	#setup wiring
 	setup_wiring();
@@ -760,7 +760,7 @@ func make_actors() -> void:
 	#auto-grates
 	autogrates = [];
 	extract_actors(Tiles.AutoGrate, Actor.Name.AutoGrate,
-	Heaviness.SUPERHEAVY, Strength.WOODEN, Durability.NOTHING, 0, false, Color(0.5, 0.5, 0.5, 1), 0, true);
+	Heaviness.SUPERHEAVY, Strength.WOODEN, Durability.NOTHING, 0, false, Color(0.5, 0.5, 0.5, 1), 0, false);
 	for actor in actors:
 		if actor.actorname == Actor.Name.AutoGrate:
 			autogrates.append(actor);
