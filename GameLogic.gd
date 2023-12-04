@@ -1670,6 +1670,8 @@ func check_won() -> void:
 			winlabel.change_text("You have won!\n\n[Bottom Face Button]: Watch Replay\nMade by Patashu (Everything Else) and Teal Knight (Art + Level Design Help)")
 		else:
 			winlabel.change_text("You have won!\n\n[Bottom Face Button]: Watch Replay\nMade by Patashu (Everything Else) and Teal Knight (Art + Level Design Help)")
+		if (!is_custom):
+			winlabel.change_text(winlabel.label.text + "\n\nAlso try the Level Editor!\n(Custom Puzzles linked in itch.io description)");
 		won_fade_started = false;
 		tutoriallabel.visible = false;
 		call_deferred("adjust_winlabel_deferred");
