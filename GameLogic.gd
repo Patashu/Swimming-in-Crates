@@ -1069,7 +1069,7 @@ func change_pressed(actor: Actor, new_value: bool, pos: Vector2, chrono: int) ->
 	set_actor_var(actor, "pressing", new_value, chrono);
 	var button_id = reverse_buttons[pos];
 	for wire in wires:
-		if wire[0] == button_id:
+		if wire[0] == button_id and hatches.size() > wire[1]:
 			set_actor_var(hatches[wire[1]], "open", new_value, chrono);
 
 func make_actor(actorname: int, pos: Vector2, is_character: bool, chrono: int = Chrono.TIMELESS) -> Actor:
