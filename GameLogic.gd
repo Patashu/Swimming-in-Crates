@@ -1435,7 +1435,7 @@ pushers_list: Array = []) -> int:
 					pushables_there.clear();
 					break;
 				else:
-					if (actor.is_character and actor_there.can_swap):
+					if (actor.is_character and actor_there.can_swap and !current_tile_is_solid(actor_there, -dir, is_gravity)):
 						just_here_to_swap.append(actor_there);
 					else:
 						pushers_list.pop_back();
