@@ -1375,7 +1375,7 @@ func strength_check(strength: float, heaviness: float) -> bool:
 	if (heaviness == Heaviness.STEEL):
 		return strength >= Strength.HEAVY;
 	if (heaviness == Heaviness.SUPERHEAVY):
-		return strength >= Strength.GRAVITY;
+		return strength >= 999;
 	return false;
 	
 func try_enter(actor: Actor, dir: Vector2, chrono: int, can_push: bool, hypothetical: bool, is_gravity: bool,
