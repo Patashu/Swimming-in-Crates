@@ -2537,8 +2537,9 @@ func _input(event: InputEvent) -> void:
 		var mouse_position = get_parent().get_global_mouse_position();
 		for a_player in players:
 			if a_player == player:
-				return;
+				continue;
 			var rect = a_player.get_rect();
+			rect.size = Vector2(cell_size, cell_size);
 			rect.position += a_player.global_position;
 			if rect.has_point(mouse_position):
 				for i in range(999):
