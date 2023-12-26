@@ -670,6 +670,8 @@ func ready_map() -> void:
 	for goal in goals:
 		goal.queue_free();
 	goals.clear();
+	for whatever in actorsfolder.get_children():
+		whatever.queue_free();
 	for whatever in underterrainfolder.get_children():
 		whatever.queue_free();
 	for whatever in underactorsparticles.get_children():
@@ -832,6 +834,14 @@ func make_actors() -> void:
 	find_gems();
 	
 	make_fish();
+	
+	var goals = get_used_cells_by_id_one_array(Tiles.Goal);
+	for goal in goals:
+		var sprite = Sprite.new();
+		sprite.texture = preload("res://assets/goal.png");
+		sprite.centered = false;
+		sprite.position = goal*cell_size;
+		actorsfolder.add_child(sprite);
 	
 func setup_wiring() -> void:
 	buttons = get_used_cells_by_id_one_array(Tiles.Switch);
