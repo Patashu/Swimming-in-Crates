@@ -20,7 +20,7 @@ var just_danced = false;
 
 # Must keep in sync with GameLogic serialize_bindings/deserialize_bindings
 var actions = ["ui_accept", "ui_cancel", "escape", "ui_left", "ui_right", "ui_up", "ui_down",
-"undo", "restart",
+"undo", "restart", "character_switch",
 "mute", "start_replay", "speedup_replay",
 "slowdown_replay", "start_saved_replay", 
 "replay_back1", "replay_fwd1", "replay_pause",
@@ -29,7 +29,7 @@ var actions = ["ui_accept", "ui_cancel", "escape", "ui_left", "ui_right", "ui_up
 ]
 
 var hrn_actions = ["Accept", "Cancel", "Menu", "Left", "Right", "Up", "Down",
-"Undo", "Restart",
+"Undo", "Restart", "Switch Dolphins",
 "Mute", "Author's Replay", "Replay Speed+",
 "Replay Speed-", "Your Replay", "Replay Turn-", "Replay Turn+", "Replay Pause",]
 

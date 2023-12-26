@@ -154,6 +154,7 @@ var first_sparkle = false;
 
 # information about the actors and their state
 var player : Actor = null
+var players = []
 var actors = []
 var goals = []
 var turn = 0;
@@ -311,6 +312,8 @@ func _ready() -> void:
 func connect_virtual_buttons() -> void:
 	virtualbuttons.get_node("Verbs/UndoButton").connect("button_down", self, "_undobutton_pressed");
 	virtualbuttons.get_node("Verbs/UndoButton").connect("button_up", self, "_undobutton_released");
+	virtualbuttons.get_node("Verbs/SwapButton").connect("button_down", self, "_swapbutton_pressed");
+	virtualbuttons.get_node("Verbs/SwapButton").connect("button_up", self, "_swapbutton_released");
 	virtualbuttons.get_node("Dirs/LeftButton").connect("button_down", self, "_leftbutton_pressed");
 	virtualbuttons.get_node("Dirs/LeftButton").connect("button_up", self, "_leftbutton_released");
 	virtualbuttons.get_node("Dirs/DownButton").connect("button_down", self, "_downbutton_pressed");
@@ -351,6 +354,9 @@ func virtual_button_released(action: String) -> void:
 func _undobutton_pressed() -> void:
 	virtual_button_pressed("undo");
 	
+func _swapbutton_pressed() -> void:
+	virtual_button_pressed("character_switch");
+	
 func _leftbutton_pressed() -> void:
 	virtual_button_pressed("ui_left");
 	
@@ -382,13 +388,10 @@ func _pausebutton_pressed() -> void:
 	virtual_button_pressed("replay_pause");
 	
 func _undobutton_released() -> void:
-	virtual_button_released("character_undo");
+	virtual_button_released("undo");
 	
 func _swapbutton_released() -> void:
 	virtual_button_released("character_switch");
-	
-func _metaundobutton_released() -> void:
-	virtual_button_released("meta_undo");
 	
 func _leftbutton_released() -> void:
 	virtual_button_released("ui_left");
@@ -454,7 +457,7 @@ func react_to_save_file_update() -> void:
 	refresh_puzzles_completed();
 	
 var actions = ["ui_accept", "ui_cancel", "escape", "ui_left", "ui_right", "ui_up", "ui_down",
-"undo", "restart",
+"undo", "restart", "character_switch",
 "mute", "start_replay", "speedup_replay",
 "slowdown_replay", "start_saved_replay"];
 	
@@ -472,24 +475,26 @@ func deserialize_bindings() -> void:
 		for action in actions:
 			var events = InputMap.get_action_list(action);
 			for event in events:
-				if (event is InputEventKey):
-					InputMap.action_erase_event(action, event);
-			for new_event_str in save_file["keyboard_bindings"][action]:
-				var parts = new_event_str.split(",");
-				var new_event = InputEventKey.new();
-				new_event.scancode = int(parts[0]);
-				new_event.physical_scancode = int(parts[1]);
-				InputMap.action_add_event(action, new_event);
+				if (save_file["keyboard_bindings"].has(action)):
+					if (event is InputEventKey):
+						InputMap.action_erase_event(action, event);
+					for new_event_str in save_file["keyboard_bindings"][action]:
+						var parts = new_event_str.split(",");
+						var new_event = InputEventKey.new();
+						new_event.scancode = int(parts[0]);
+						new_event.physical_scancode = int(parts[1]);
+						InputMap.action_add_event(action, new_event);
 	if save_file.has("controller_bindings"):
 		for action in actions:
 			var events = InputMap.get_action_list(action);
 			for event in events:
-				if (event is InputEventJoypadButton):
-					InputMap.action_erase_event(action, event);
-			for new_event_int in save_file["controller_bindings"][action]:
-				var new_event = InputEventJoypadButton.new();
-				new_event.button_index = new_event_int;
-				InputMap.action_add_event(action, new_event);
+				if (save_file["controller_bindings"].has(action)):
+					if (event is InputEventJoypadButton):
+						InputMap.action_erase_event(action, event);
+					for new_event_int in save_file["controller_bindings"][action]:
+						var new_event = InputEventJoypadButton.new();
+						new_event.button_index = new_event_int;
+						InputMap.action_add_event(action, new_event);
 
 func serialize_bindings() -> void:
 	if !save_file.has("keyboard_bindings"):
@@ -725,11 +730,7 @@ func intro_sparkle() -> void:
 func ready_tutorial() -> void:
 	metainfolabel.visible = true;
 	tutoriallabel.visible = false;
-	if (actorsfolder.scale == Vector2(2.0, 2.0)):
-		downarrow.visible = false;
-	else:
-		downarrow.visible = true;
-		downarrow.position = player.position + actorsfolder.position - Vector2(0, cell_size);
+	downarrow.visible = true;
 	leftarrow.visible = false;
 	rightarrow.visible = false;
 	return;
@@ -767,6 +768,7 @@ func make_actors() -> void:
 	
 	# find the player
 	# as a you-fucked-up backup, put them in 0,0 if there seems to be none
+	players.clear()
 	var layers_tiles = get_used_cells_by_id_all_layers(Tiles.Dolphin);
 	var found_one = false;
 	for i in range(layers_tiles.size()):
@@ -780,6 +782,7 @@ func make_actors() -> void:
 		for tile in tiles:
 			terrain_layers[i].set_cellv(tile, -1);
 			player = make_actor(Actor.Name.Dolphin, tile, true);
+			players.append(player);
 			player.heaviness = Heaviness.IRON;
 			player.strength = Strength.LIGHT;
 			player.durability = Durability.SPIKES;
@@ -796,6 +799,7 @@ func make_actors() -> void:
 			player.dolphin_sprite.offset = Vector2.ZERO;
 			player.add_child(player.dolphin_sprite);
 			player.update_graphics();
+	virtualbuttons.get_node("Verbs/SwapButton").visible = players.size() > 1;
 	
 	# crates
 	extract_actors(Tiles.CrateFloat, Actor.Name.CrateFloat,
@@ -940,25 +944,13 @@ func calculate_map_size() -> void:
 		
 func update_targeter() -> void:
 	targeter.visible = false;
-#	if (heavy_selected):
-#		targeter.position = heavy_actor.position + terrainmap.position - Vector2(2, 2);
-#	else:
-#		targeter.position = light_actor.position + terrainmap.position - Vector2(2, 2);
-#
-#	if (!downarrow.visible):
-#		return;
-#
-#	downarrow.position = targeter.position - Vector2(0, 24);
-#
-#	if (heavy_turn > 0 and heavy_selected):
-#		rightarrow.position = heavytimeline.position - Vector2(24, 24) + Vector2(0, 24)*heavy_turn;
-#	else:
-#		rightarrow.position = Vector2(-48, -48);
-#
-#	if (light_turn > 0 and !heavy_selected):
-#		leftarrow.position = lighttimeline.position + Vector2(24, -24) + Vector2(0, 24)*light_turn;
-#	else:
-#		leftarrow.position = Vector2(-48, -48);
+	
+	if (actorsfolder.scale == Vector2(2.0, 2.0)):
+		downarrow.scale = Vector2(2.0, 2.0);
+		downarrow.position = actorsfolder.position + 2.0*(player.position - Vector2(0, cell_size));
+	else:
+		downarrow.scale = Vector2(1.0, 1.0);
+		downarrow.position = actorsfolder.position + player.position - Vector2(0, cell_size);
 		
 func prepare_audio() -> void:
 	# TODO: I could automate this if I can iterate the folder
@@ -1167,7 +1159,8 @@ pushers_list: Array = [], is_move: bool = false, success: int = Success.No) -> i
 	return success;
 	
 func adjust_turn(amount: int) -> void:
-	downarrow.visible = false;
+	if (players.size() < 2):
+		downarrow.visible = false;
 	turn += amount;
 	check_won();
 		
@@ -1435,7 +1428,7 @@ pushers_list: Array = []) -> int:
 					pushables_there.clear();
 					break;
 				else:
-					if (actor.is_character and actor_there.can_swap and !current_tile_is_solid(actor_there, -dir, is_gravity)):
+					if (pushers_list.size() < 2 and actor.is_character and actor_there.can_swap and !current_tile_is_solid(actor_there, -dir, is_gravity)):
 						just_here_to_swap.append(actor_there);
 					else:
 						pushers_list.pop_back();
@@ -1453,7 +1446,7 @@ pushers_list: Array = []) -> int:
 					pushables_there.clear();
 					result = Success.Yes;
 					break;
-				elif (!actor.broken and pushables_there.size() == 1 and actor_there.can_swap and actor.is_character and !is_gravity):
+				elif (pushers_list.size() < 2 and !actor.broken and pushables_there.size() == 1 and actor_there.can_swap and actor.is_character and !is_gravity):
 					# When making a non-gravity move, if the push fails, Dolphin can swap with a swappable crate.
 					# since swappable crate did a bump, Dolphin needs to do a bump too to sync up animations
 					if (!just_here_to_swap.has(actor_there)):
@@ -1544,7 +1537,15 @@ func undo_replay() -> bool:
 	if (voidlike_puzzle):
 		user_replay += "z";
 	else:
-		user_replay = user_replay.left(user_replay.length() - 1);
+		if !user_replay.ends_with("x"):
+			user_replay = user_replay.left(user_replay.length() - 1);
+		else:
+			var counter = 0;
+			while user_replay.ends_with("x"):
+				user_replay = user_replay.left(user_replay.length() - 1);
+			user_replay = user_replay.left(user_replay.length() - 1);
+			for i in range(counter):
+				append_replay("x");
 	return true;
 
 func clone_actor_but_dont_add_it(actor : Actor) -> Actor:
@@ -1755,6 +1756,17 @@ func undo(is_silent: bool = false) -> bool:
 	finish_animations(Chrono.UNDO);
 	undo_effect_color = arbitrary_color;
 	return undo_replay();
+
+func character_switch() -> void:
+	if (players.size() < 2):
+		return;
+	var index = players.find(player);
+	if (index == players.size() - 1):
+		player = players[0];
+	else:
+		player = players[index + 1];
+	play_sound("switch")
+	append_replay("x")
 
 func restart(_is_silent: bool = false) -> void:
 	load_level(0);
@@ -2229,6 +2241,10 @@ func do_one_replay_turn() -> void:
 		character_move(Vector2.RIGHT);
 	elif (replay_char == "z"):
 		undo();
+	elif (replay_char == "x"):
+		character_switch();
+	if replay_char == "x":
+		return
 	if old_turn == turn:
 		replay_turn -= 1;
 		# replay contains a bump - silently delete the bump so we don't desync when trying to meta-undo it
@@ -2292,7 +2308,10 @@ func replay_advance_turn(amount: int) -> void:
 			var iterations = replay_turn - target_turn;
 			for _i in range(iterations):
 				var last_input = level_replay[replay_turn - 1];
-				undo();
+				if (last_input == "x"):
+					character_switch();
+				else:
+					undo();
 				replay_turn -= 1;
 	replay_paused = true;
 	update_info_labels();
@@ -2429,7 +2448,7 @@ func is_valid_replay(replay: String) -> bool:
 	if replay.length() <= 0:
 		return false;
 	for letter in replay:
-		if !(letter in "wasdz"):
+		if !(letter in "wasdzx"):
 			return false;
 	return true;
 
@@ -2506,6 +2525,28 @@ func unwin() -> void:
 		save_file["levels"][level_name].clear();
 	save_game();
 	update_level_label();
+	
+func _input(event: InputEvent) -> void:
+	if (ui_stack.size() > 0):
+		return;
+		
+	if (players.size() < 2):
+		return;
+	
+	if event is InputEventMouseButton:
+		var mouse_position = get_parent().get_global_mouse_position();
+		for a_player in players:
+			if a_player == player:
+				return;
+			var rect = a_player.get_rect();
+			rect.position += a_player.global_position;
+			if rect.has_point(mouse_position):
+				for i in range(999):
+					end_replay();
+					character_switch();
+					update_info_labels();
+					if a_player == player:
+						return;
 
 func serialize_current_level() -> String:
 	if (is_custom):
@@ -2909,6 +2950,10 @@ func _process(delta: float) -> void:
 		elif (Input.is_action_just_pressed("undo")):
 			end_replay();
 			undo();
+			update_info_labels();
+		elif (Input.is_action_just_pressed("character_switch")):
+			end_replay();
+			character_switch();
 			update_info_labels();
 		elif (Input.is_action_just_pressed("restart")):
 			# must be kept in sync with Menu "restart"

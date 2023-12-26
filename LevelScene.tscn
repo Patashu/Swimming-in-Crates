@@ -173,7 +173,6 @@ theme = ExtResource( 2 )
 text = ">>"
 
 [node name="VirtualButtons" type="Node2D" parent="."]
-visible = false
 
 [node name="Verbs" type="Node2D" parent="VirtualButtons"]
 
@@ -184,6 +183,14 @@ margin_right = 29.0
 margin_bottom = 295.0
 theme = ExtResource( 2 )
 text = "Z"
+
+[node name="SwapButton" type="Button" parent="VirtualButtons/Verbs"]
+margin_left = 34.0
+margin_top = 273.0
+margin_right = 55.0
+margin_bottom = 295.0
+theme = ExtResource( 2 )
+text = "X"
 
 [node name="Dirs" type="Node2D" parent="VirtualButtons"]
 
