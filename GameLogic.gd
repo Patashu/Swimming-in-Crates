@@ -1695,7 +1695,8 @@ func check_won() -> void:
 		call_deferred("adjust_winlabel_deferred");
 	elif won_fade_started:
 		won_fade_started = false;
-		player.modulate.a = 1;
+		for a_player in players:
+			a_player.modulate.a = 1;
 	
 func adjust_winlabel_deferred() -> void:
 	call_deferred("adjust_winlabel");
