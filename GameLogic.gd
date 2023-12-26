@@ -1411,6 +1411,10 @@ pushers_list: Array = []) -> int:
 		var strength_modifier = 0;
 		pushers_list.append(actor);
 		for actor_there in pushables_there:
+			# hard code it so dolphins can't push other dolphins due to gravity
+			if (is_gravity and actor.is_character and actor_there.is_character):
+				strength_modifier = -999;
+			
 			# Strength Rule
 			# with a twist for Swimming in Crates - buoyant crates can stack up and outnumber weaker opposition.
 			# One more special rule to prevent grossness - a neutrally buoyant crate is 0.5 opposing movement.
@@ -1628,9 +1632,12 @@ func check_won() -> void:
 		return
 	Shade.on = false;
 	
-	if (!player.broken and goal_here(player.pos, terrain_in_tile(player.pos))):
-		won = true;
-		
+	for a_player in players:
+		if (!a_player.broken and goal_here(a_player.pos, terrain_in_tile(a_player.pos))):
+			won = true;
+			break;
+	
+	if (won):
 		if (won and test_mode):
 			var level_info = terrainmap.get_node_or_null("LevelInfo");
 			if (level_info != null):
@@ -2430,7 +2437,8 @@ func update_animation_server(skip_globals: bool = false) -> void:
 			won_fade_started = true;
 			if (lost):
 				fade_in_lost();
-			add_to_animation_server(player, [Animation.fade]);
+			for a_player in players:
+				add_to_animation_server(a_player, [Animation.fade]);
 		return;
 	
 	# we found new animations - give them to everyone at once
