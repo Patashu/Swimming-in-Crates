@@ -473,28 +473,28 @@ func setup_deadzone() -> void:
 func deserialize_bindings() -> void:
 	if save_file.has("keyboard_bindings"):
 		for action in actions:
-			var events = InputMap.get_action_list(action);
-			for event in events:
-				if (save_file["keyboard_bindings"].has(action)):
-					if (event is InputEventKey):
-						InputMap.action_erase_event(action, event);
-					for new_event_str in save_file["keyboard_bindings"][action]:
-						var parts = new_event_str.split(",");
-						var new_event = InputEventKey.new();
-						new_event.scancode = int(parts[0]);
-						new_event.physical_scancode = int(parts[1]);
-						InputMap.action_add_event(action, new_event);
+			if (save_file["keyboard_bindings"].has(action)):
+				var events = InputMap.get_action_list(action);
+				for event in events:
+						if (event is InputEventKey):
+							InputMap.action_erase_event(action, event);
+						for new_event_str in save_file["keyboard_bindings"][action]:
+							var parts = new_event_str.split(",");
+							var new_event = InputEventKey.new();
+							new_event.scancode = int(parts[0]);
+							new_event.physical_scancode = int(parts[1]);
+							InputMap.action_add_event(action, new_event);
 	if save_file.has("controller_bindings"):
 		for action in actions:
-			var events = InputMap.get_action_list(action);
-			for event in events:
-				if (save_file["controller_bindings"].has(action)):
-					if (event is InputEventJoypadButton):
-						InputMap.action_erase_event(action, event);
-					for new_event_int in save_file["controller_bindings"][action]:
-						var new_event = InputEventJoypadButton.new();
-						new_event.button_index = new_event_int;
-						InputMap.action_add_event(action, new_event);
+			if (save_file["controller_bindings"].has(action)):
+				var events = InputMap.get_action_list(action);
+				for event in events:
+						if (event is InputEventJoypadButton):
+							InputMap.action_erase_event(action, event);
+						for new_event_int in save_file["controller_bindings"][action]:
+							var new_event = InputEventJoypadButton.new();
+							new_event.button_index = new_event_int;
+							InputMap.action_add_event(action, new_event);
 
 func serialize_bindings() -> void:
 	if !save_file.has("keyboard_bindings"):
